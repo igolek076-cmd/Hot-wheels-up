@@ -83,7 +83,7 @@ button:disabled{opacity:.45;cursor:default}
 .tabs{overflow-x:auto;padding-top:7px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabs button{flex:1 0 56px}
 .avs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.avs button{padding:3px;border-radius:50%;background:var(--card);border:3px solid var(--line)}.avs button.on{border-color:var(--accent)}.avs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:50%;display:block}
 #nick{width:100%;font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text)}
-#jwheel{width:270px;height:270px;border-radius:50%;transition:transform 6.5s cubic-bezier(.12,.7,.1,1)}
+#lwheel,#jwheel{width:270px;height:270px;border-radius:50%;transition:transform 6.5s cubic-bezier(.12,.7,.1,1)}
 .gbox{max-height:88vh;overflow:auto}
 body{padding-bottom:92px}
 .gear{width:40px;height:40px;padding:0;border-radius:50%;font-size:20px;background:var(--card);color:var(--text);border:1px solid var(--line);flex:none}.gear.on{border-color:var(--accent)}
@@ -102,10 +102,22 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .avt{display:inline-block;flex:none;background-size:cover;background-position:center;border-radius:50%;vertical-align:top}
 #shareov{position:fixed;inset:0;background:rgba(0,0,0,.72);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#shareov.on{display:flex}
 .linkbox{font-family:ui-monospace,Menlo,monospace;font-size:15px;padding:12px;border-radius:10px;border:1px dashed var(--line);background:var(--bg);word-break:break-all;text-align:center;user-select:all;-webkit-user-select:all}
+#bsw button{font-size:12px;padding:10px 4px}
+#selov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#selov.on{display:flex}
+.rslots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;text-align:center}.rslot{display:flex;flex-direction:column;align-items:center;gap:3px}.rslot small{font-size:10px;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#raceov{position:fixed;inset:0;z-index:120;background:var(--bg);display:none;flex-direction:column;align-items:center;gap:6px;padding:8px;touch-action:none;user-select:none;-webkit-user-select:none}
+#raceov.on{display:flex}
+.rhud{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;font-size:17px}.rhud button{width:40px;padding:6px;margin:0}
+#rcv{max-width:100%;max-height:54vh;border-radius:14px;flex:none;background:#222}
+#rctl{display:flex;flex-direction:column;align-items:center;gap:2px}
+#rwheel{width:150px;height:150px;color:var(--text);touch-action:none}
+#rres{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:min(320px,90%);z-index:5;display:none}
+#vaultov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#vaultov.on{display:flex}
+#nick:disabled{opacity:.75}
 </style>
 </head>
 <body>
-<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="bal"></b><button class="gear" id="gear" aria-label="Settings">⚙️</button></span></h1>
+<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="gwchip" class="gold" style="font-size:14px"></b><b id="bal"></b><button class="gear" id="gear" aria-label="Settings">⚙️</button></span></h1>
 
 
 <div class="sec on" id="sec-w">
@@ -126,10 +138,11 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <button class="sell" id="sell" style="display:none"></button>
 </div>
 
-<div class="sw" id="bsw" style="display:none;grid-template-columns:1fr 1fr;margin-bottom:10px"></div>
+<div class="sw" id="bsw" style="display:none;grid-template-columns:1fr 1fr 1fr;margin-bottom:10px"></div>
 <div class="sec" id="sec-d">
   <div class="card"><div class="note" style="margin:0 0 10px;text-align:left" data-i="duel_rules"></div><div class="sw" id="bots"></div></div>
   <div class="card" id="dpanel"></div>
+  <div class="card" id="livecard"></div>
   <h2><span data-i="coll"></span></h2>
   <div class="note" style="margin:-4px 0 8px;text-align:left" data-i="multi_hint"></div>
   <div class="grid" id="dinv"></div>
@@ -143,6 +156,17 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <div class="grid" id="jinv"></div>
 </div>
 
+<div class="sec" id="sec-r">
+  <div class="card"><div class="note" style="margin:0;text-align:left" data-i="race_rules"></div></div>
+  <div class="card" id="rpanel"></div>
+</div>
+
+<div class="sec" id="sec-g">
+  <div class="card" id="gpanel"></div>
+  <h2><span data-i="coll"></span></h2>
+  <div class="grid" id="ginv"></div>
+</div>
+
 <div class="sec" id="sec-s">
   <div class="card"><div class="row"><span data-i="you_have"></span><b id="bal2"></b></div><div class="note" style="margin-top:0;text-align:left" data-i="shop_note"></div></div>
   <div id="offers"></div>
@@ -150,6 +174,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 </div>
 
 <div class="sec" id="sec-q">
+  <div class="note" id="qtimer" style="margin:0 0 10px;font-weight:700"></div>
   <div class="card note" style="text-align:left;margin-top:0" data-i="quest_note"></div>
   <div id="quests"></div>
 </div>
@@ -164,8 +189,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <div class="sec" id="sec-p">
   <button id="sharebtn" data-i="share_btn" style="margin-bottom:10px"></button>
   <div class="card" id="tgcard" style="display:none"><h2 style="margin-top:0" data-i="tg_title"></h2><div id="tgon"><div class="dealer"><span id="tgav" class="avt" style="width:56px;height:56px;border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#fff;background-color:var(--accent)"></span><div style="flex:1"><b id="tgname"></b><div class="note" style="text-align:left;margin:2px 0 0" id="tgun"></div></div></div><button class="ghost" id="tguse" data-i="tg_use"></button></div><div id="tgoff" style="display:none"><div class="note" style="text-align:left;margin:0 0 10px" data-i="tg_hint"></div><button class="buy" id="tgopen" data-i="tg_open"></button></div></div>
-  <div class="card"><div class="dealer"><span id="pavimg" class="avt" style="width:76px;height:76px;border:3px solid var(--accent)"></span><div style="flex:1"><h2 style="margin:0 0 6px" data-i="prof_nick"></h2><input id="nick" maxlength="16" autocomplete="off"></div></div>
-  <h2 data-i="prof_avatar" style="margin-top:14px"></h2><div class="avs" id="avs"></div></div>
+  <div class="card"><div class="dealer"><span id="pavimg" class="avt" style="width:76px;height:76px;border:3px solid var(--accent)"></span><div style="flex:1"><h2 style="margin:0 0 6px" data-i="prof_nick"></h2><input id="nick" maxlength="16" autocomplete="off"><button class="ghost" id="nicksave" data-i="nick_save" style="margin-top:6px;display:none"></button><div class="note" id="nickhint" style="text-align:left;margin:6px 0 0"></div></div></div>
+  <div class="row" style="margin-top:12px"><span data-i="pid_label"></span><span style="display:flex;align-items:center;gap:8px"><b id="pid"></b><button class="ghost" id="pidcopy" data-i="copy" style="width:auto;padding:5px 10px;margin:0;font-size:12px"></button></span></div><div class="row"><span>Telegram</span><b id="puser"></b></div><h2 data-i="prof_avatar" style="margin-top:14px"></h2><div class="avs" id="avs"></div></div>
   <div id="prof"></div></div>
 
 <div class="sec" id="sec-x">
@@ -176,8 +201,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <button class="ghost" id="reset" data-i="reset"></button>
 </div>
 
-<div class="tabs" id="tabs"><button data-t="w" class="on"><i>⬆️</i><small data-i="tab_w"></small></button><button data-t="b"><i>⚔️</i><small data-i="tab_b"></small></button><button data-t="s"><i>🛒</i><small data-i="tab_s"></small></button><button data-t="q"><i>🎯</i><small data-i="tab_q"></small></button><button data-t="m"><i>🕶</i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="p"><i>👤</i><small data-i="tab_p"></small></button></div>
+<div class="tabs" id="tabs"><button data-t="w" class="on"><i>⬆️</i><small data-i="tab_w"></small></button><button data-t="b"><i>⚔️</i><small data-i="tab_b"></small></button><button data-t="s"><i>🛒</i><small data-i="tab_s"></small></button><button data-t="q"><i>🎯</i><small data-i="tab_q"></small></button><button data-t="m"><i>🕶</i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="g"><i>🔧</i><small data-i="tab_g"></small></button><button data-t="p"><i>👤</i><small data-i="tab_p"></small></button></div>
 <div id="shareov"><div class="gbox"><div class="gt" data-i="share_title"></div><div class="linkbox" id="slink"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="buy" id="scopy" data-i="copy"></button><button id="sshare" data-i="share"></button></div><div class="note" id="smsg" style="min-height:16px"></div><button class="ghost" id="sclose" data-i="close"></button></div></div>
+<div id="selov"><div class="gbox"><div class="gt" data-i="sel_title"></div><div class="grid" id="selgrid" style="max-height:50vh;overflow:auto"></div><button id="seldone" style="margin-top:12px"></button></div></div>
+<div id="raceov"><div class="rhud"><b id="rpos">1/5</b><b id="rtime">0:00</b><button class="ghost" id="rquit">✕</button></div><canvas id="rcv" width="360" height="440"></canvas>
+<div id="rctl"><svg id="rwheel" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="9" fill="currentColor"/><path d="M50 50 L12 50 M50 50 L88 50 M50 50 L50 86" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><rect x="45" y="4" width="10" height="9" rx="2" fill="#e5384a"/></svg><div class="note" data-i="race_hint" style="margin:0"></div></div>
+<div id="rres"></div></div>
+<div id="vaultov"><div class="gbox"><div class="gt"><span data-i="vault_title"></span> <span style="font-size:14px" id="vgw"></span></div><div class="note" data-i="vault_note" style="margin:0 0 10px;text-align:left"></div><div class="sw" style="grid-template-columns:1fr 1fr;margin-bottom:10px" id="vtabs"></div><div class="grid" id="vgrid" style="max-height:42vh;overflow:auto"></div><button id="vdone" style="margin-top:12px"></button></div></div>
 <div id="got"><div class="gbox"><div class="gt" id="gt"></div><div class="gcars" id="gcar"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="sell" id="gsell" style="margin-top:0"></button><button id="gok" data-i="keep"></button></div></div></div>
 <div id="caseov"><div class="cbox"><div class="gt" data-i="case_t"></div><div class="cwin" id="cwin"><div class="cmark"></div><div id="cstrip"></div></div></div></div>
 <div id="pick"><div class="gbox"><div class="gt" data-i="inc_pick"></div><div class="grid" id="pgrid" style="max-height:50vh;overflow:auto"></div><button class="ghost" id="pcancel" data-i="cancel"></button></div></div>
@@ -209,6 +239,9 @@ const tgInit=(tgName[0]||"?").toUpperCase().replace(/[<>&]/g,"");
 let tgAv=tgPhoto||(tgUser?"data:image/svg+xml;utf8,"+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='#229ED9'/><text x='50' y='50' dy='.35em' text-anchor='middle' font-family='sans-serif' font-size='52' font-weight='700' fill='white'>${tgInit}</text></svg>`):null);
 const avList=()=>AVS.map((u,i)=>({id:i,u})).concat(tgAv?[{id:-1,u:tgAv}]:[]);
 const SHARE_URL="https://t.me/hwmegabot";
+// Адрес онлайн-сервера (wss://...). Пока пусто — игра работает офлайн, а золотые колёса получить нельзя.
+const HW_SERVER="";
+const gwIcon=(s=16)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" style="vertical-align:-3px"><circle cx="12" cy="12" r="9" fill="none" stroke="#f5b820" stroke-width="3.5"/><circle cx="12" cy="12" r="2.6" fill="#f5b820"/><path d="M12 12V3.5M12 12l7.4 4.3M12 12l-7.4 4.3" stroke="#f5b820" stroke-width="2" stroke-linecap="round"/></svg>`;
 const BOTS=[{n:["Дымок","Smokey"],img:"data:image/jpeg;base64,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",lo:.8,hi:1.1},{n:["Пончик","Donut"],img:"data:image/jpeg;base64,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",lo:1,hi:1.5},
 {n:["Эндер","Ender"],img:"data:image/jpeg;base64,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",lo:.9,hi:1.3},{n:["Цыпа","Chick"],img:"data:image/jpeg;base64,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",lo:.7,hi:1},{n:["Борис","Boris"],img:"data:image/jpeg;base64,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",lo:1.2,hi:1.8}];
 const D={
@@ -249,7 +282,32 @@ cash:["Деньги","Cash"],r_cash:["💰 Хотвилса дороже тво�
 cash_note:["💰 Дороже хотвилса нет: приз выплатят деньгами","💰 No pricier car exists: the prize is paid in cash"],
 r_win:["✅ Теперь у тебя {0} ({1})","✅ You now have {0} ({1})"],r_gold:["🌟 STH: {0} ({1})","🌟 STH: {0} ({1})"],r_lose:["❌ Красное. Потеряно: {0}","❌ Red. Lost: {0}"],sold:["Продано: {0} за {1}","Sold: {0} for {1}"],
 g_win:["✅ Успех!","✅ Success!"],g_gold:["🌟 ЗОЛОТО! Super Treasure Hunt","🌟 GOLD! Super Treasure Hunt"],g_buy:["🛒 Покупка!","🛒 Purchase!"],g_box:["📦 Из коробки!","📦 From the box!"],g_quest:["🎯 Награда MOBFARM!","🎯 MOBFARM reward!"],got_sell:["Продать за {0}","Sell for {0}"],keep:["Оставить","Keep"],
-r_a:["Автограф","Signed"]};
+r_a:["Автограф","Signed"],
+nick_save:["Сохранить ник (навсегда)","Save nickname (forever)"],nick_tg:["Ник берётся из Telegram и не меняется.","The nickname comes from Telegram and can’t be changed."],nick_locked:["Ник сохранён и больше не меняется.","The nickname is saved and can’t be changed."],nick_once:["Ник можно задать один раз, потом изменить его будет нельзя.","You can set the nickname once; it can’t be changed afterwards."],
+pid_label:["ID игрока","Player ID"],no_username:["нет @username","no @username"],
+vault_title:["Онлайн-коллекция","Online collection"],vault_mine:["Мои","Mine"],vault_buy:["Купить за 🛞","Buy with 🛞"],vault_pick:["📦 Выбрать ставку","📦 Choose stake"],vault_change:["📦 Изменить ставку","📦 Change stake"],
+vault_note:["Онлайн-коллекция хранится на сервере и отдельна от обычной: машинки в неё нельзя положить из игры, а выдаёт их только сервер. Стартовые машинки бесплатно, остальные за золотые колёса.","The online collection lives on the server and is separate from your normal one: you can’t put cars into it from the game, only the server hands them out. Starter cars are free, the rest cost golden wheels."],
+dl_ratio:["Соперника подбираем с похожей ставкой (разница в цене не больше чем втрое). Шанс считается по цене ставок.","We match opponents with a similar stake (price difference up to 3x). Odds follow the stake prices."],
+g_vault:["🏆 Ты забрал ставку!","🏆 You took the stake!"],dl_lostc:["Потеряно: {0}","Lost: {0}"],
+gw:["Золотые колёса","Golden wheels"],gw_hint:["Золотые колёса выдаёт только сервер: за рейтинговые гонки и за победы в дуэлях с живыми игроками. В обычных гонках и дуэлях с ботами их не получить.","Golden wheels are issued by the server only: for ranked races and wins in duels against live players. Regular races and duels against bots never give them."],
+rating:["Рейтинг","Rating"],net_status:["Онлайн","Online"],net_off:["сервер не подключён","no server connected"],net_connecting:["подключаемся…","connecting…"],net_online:["подключено ✓","connected ✓"],net_error:["нет связи","no connection"],
+net_need:["Нужен онлайн-сервер. Пока он не подключён, золотые колёса получить нельзя.","An online server is required. Until it is connected, golden wheels can’t be earned."],
+race_ranked:["Рейтинговая гонка","Ranked race"],race_ranked_note:["У всех одинаковая скорость, решает мастерство. За призовые места: золотые колёса и рейтинг.","Everyone has the same speed, so skill decides. Top places earn golden wheels and rating."],
+race_ranked_rule:["Для наград нужно минимум {0} живых игрока; свободные места через 25 секунд займут боты.","Rewards need at least {0} live players; free spots are filled by bots after 25 seconds."],
+rr_dq:["Дисквалификация: нереальная скорость","Disqualified: impossible speed"],rr_gain:["Золотые колёса: +{0}","Golden wheels: +{0}"],rr_rating:["Рейтинг: {0}","Rating: {0}"],rr_unranked:["Мало живых игроков: награды и рейтинг не выданы","Not enough live players: no rewards or rating"],
+dl_title:["🌐 Дуэль с живым игроком","🌐 Duel vs a live player"],dl_rule:["Ставишь машинки из онлайн-коллекции. Победитель забирает ставку соперника и с шансом 50% получает золотое колесо.","You stake cars from the online collection. The winner takes the opponent’s stake and has a 50% chance to get a golden wheel."],
+dl_find:["🔍 Найти живого игрока","🔍 Find a live player"],dl_search:["Ищем живого игрока… {0} с","Looking for a live player… {0}s"],dl_win:["🏆 Победа над {0}!","🏆 You beat {0}!"],dl_lose:["💥 Победил(а) {0}","💥 {0} won"],
+dl_win_gw:["Золотое колесо: +1","Golden wheel: +1"],dl_nogw:["Золотое колесо на этот раз не выпало","No golden wheel this time"],dl_none:["Живой игрок не найден","No live player found"],g_gw:["🛞 Золотое колесо!","🛞 Golden wheel!"],
+tab_g:["Гараж","Garage"],tab_r:["Гонка","Race"],q_reset:["Задания обновятся через {0}. Забирай награды до обновления!","Quests refresh in {0}. Claim your rewards before that!"],
+g_consol:["🎁 Утешительный приз!","🎁 Consolation prize!"],r_consol:["🎁 Утешительный приз: {0}","🎁 Consolation prize: {0}"],r_consol_cash:["🎁 Утешительный приз: {0}","🎁 Consolation prize: {0}"],case_c:["🎁 Утешительный приз…","🎁 Consolation prize…"],
+pick_btn:["🚗 Выбрать машинки","🚗 Choose cars"],sel_title:["Выбери машинки для ставки","Choose cars to stake"],sel_done:["Готово ({0})","Done ({0})"],no_cars:["Нет машинок","No cars"],kmh:["км/ч","km/h"],
+g_pick:["Выбери машинку, чтобы улучшить её или сделать гоночной.","Pick a car to tune it or make it your racer."],g_speed:["Скорость","Speed"],g_level:["Уровень тюнинга","Tuning level"],g_max:["Максимальный уровень","Max level"],g_next:["После улучшения: {0}","After tuning: {0}"],g_up:["🔧 Улучшить за {0}","🔧 Tune for {0}"],g_racer:["🏁 Сделать гоночной","🏁 Make my racer"],g_isracer:["🏁 Это твоя гоночная","🏁 This is your racer"],
+race_rules:["Скорость машинки зависит от её цены и тюнинга из гаража. Рули, чтобы держаться дороги и объезжать конусы. Награда зависит от занятого места.","Your car’s speed depends on its price and garage tuning. Steer to stay on the road and dodge the cones. The prize depends on your place."],
+race_nocar:["Для гонки нужна хотя бы одна машинка.","You need at least one car to race."],race_create:["➕ Создать лобби","➕ Create lobby"],race_join:["🚪 Войти в лобби","🚪 Join a lobby"],race_garage:["🔧 Гараж","🔧 Garage"],
+race_offline:["Серверов пока нет: лобби создают боты. В гонке 5 игроков, свободные места через 25 секунд займут боты.","There are no servers yet: lobbies are made by bots. A race has 5 players and free spots are filled by bots after 25 seconds."],
+race_track:["Трасса","Track"],race_make:["Создать лобби","Create lobby"],race_lobbies:["Готовые лобби","Open lobbies"],race_enter:["Войти","Join"],race_refresh:["🔄 Обновить список","🔄 Refresh list"],
+race_wait:["Ищем игроков…","Looking for players…"],race_filled:["Не хватило игроков: свободные места заняли боты 🤖","Not enough players: free spots were taken by bots 🤖"],race_go:["Старт через {0}","Starting in {0}"],
+race_place:["{0}-е место!","Place {0}!"],race_noprize:["Без награды","No prize"],race_done:["Готово","Done"],race_hint:["Крути руль пальцем (или стрелками ← →)","Turn the wheel with your finger (or ← → keys)"],races:["Гонки (победы / всего)","Races (wins / total)"]};
 const tr=(k,...a)=>{if(!D[k])return k;let s=D[k][S.set.lang==="en"?1:0];a.forEach((v,i)=>s=s.replace("{"+i+"}",()=>v));return s};
 const R={c:{n:"Mainline",col:"#8a8a99"},p:{n:"Rare",col:"#3b82f6"},a:{n:"",col:"#8b5cf6"},t:{n:"Treasure Hunt",col:"#22b35e"},s:{n:"Super TH",col:"#d99a00"},m:{n:"MOBFARM",col:"#e91e8c"}};
 const rn=k=>k==="a"?tr("r_a"):R[k].n;
@@ -294,19 +352,20 @@ function money(n){const loc=en()?"en-US":"ru-RU";
 const sellPrice=c=>Math.round(c.price*.9);
 const sumP=a=>a.reduce((s,c)=>s+c.price,0);
 const lvl=()=>Math.floor(Math.sqrt((S.xp||0)/40))+1;
-const mk=id=>({id,pb:0});
+const mk=id=>({id,pb:0,u:++S.uid});
 const readyD=d=>Date.now()-d.t0>=DEP_MS;
 const fmtT=ms=>{const s=Math.ceil(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
 
-function norm(v){v.inv=v.inv.map(x=>typeof x==="number"?mk(x):x);v.inv.forEach(o=>{if(o.g){o.pb=(o.pb||0)+o.g.amt}delete o.g});
+function norm(v){v.inv=v.inv.map(x=>typeof x==="number"?{id:x,pb:0}:x);v.uid=v.uid||0;v.inv.forEach(o=>{if(!o.u)o.u=++v.uid});v.inv.forEach(o=>{if(o.g){o.pb=(o.pb||0)+o.g.amt}delete o.g});
   if(v.xp==null)v.xp=0;if(v.luck==null)v.luck=0;if(!v.dep)v.dep=[];if(v.bonus&&!v.bonus.key)v.bonus=null;
   v.set=Object.assign({th:"fire",mode:"auto",lang:"ru",cur:"rub"},v.set||{});
-  if(!v.prof)v.prof={name:"",av:0};
-  v.st=Object.assign({spins:0,wins:0,buys:0,sells:0,prem:0,gold:0,duels:0,dwins:0,jp:0,jpw:0},v.st||{});v.cl=v.cl||{};if(!v.shop)v.shop=[];return v}
+  if(!v.prof)v.prof={name:"",av:0};if(!v.pid)v.pid=String(10000000+Math.floor(Math.random()*90000000));if(v.gwc==null)v.gwc=0;if(v.ratc==null)v.ratc=1000;
+  v.st=Object.assign({spins:0,wins:0,buys:0,sells:0,prem:0,gold:0,duels:0,dwins:0,jp:0,jpw:0,races:0,racew:0},v.st||{});
+  if(!v.q0)v.q0=Date.now();if(!v.qbase)v.qbase=Object.assign({},v.st);v.cl=v.cl||{};if(!v.shop)v.shop=[];return v}
 function fresh(){return norm({xp:0,bal:400,inv:[0,1],st:{},cl:{},shop:[],bonus:null,luck:0,dep:[],set:{}})}
 function save(){try{localStorage.setItem("hw_state4",JSON.stringify(S))}catch(e){}}
 function load(){for(const k of["hw_state4","hw_state3"]){try{const v=JSON.parse(localStorage.getItem(k));if(v&&Array.isArray(v.inv))return norm(v)}catch(e){}}return null}
-const inv=()=>S.inv.map(o=>{const c=BY(o.id);return Object.assign({},c,{price:c.price+(o.pb||0)})});
+const inv=()=>S.inv.map(o=>{const c=BY(o.id);return Object.assign({},c,{price:c.price+(o.pb||0),tn:o.tn||0,u:o.u})});
 const selCars=L=>sel.map(i=>L[i]).filter(Boolean);
 const stakeKey=()=>sel.map(i=>S.inv[i]?S.inv[i].id:0).sort((a,b)=>a-b).join("-");
 
@@ -316,7 +375,7 @@ function applyTheme(){
 }
 function applyLang(){document.querySelectorAll("[data-i]").forEach(e=>e.innerHTML=tr(e.dataset.i));$("nick").placeholder=tgName.slice(0,16)||tr("nick_ph")}
 function svg(col,w=54,h=26){return `<svg viewBox="0 0 64 30" width="${w}" height="${h}"><path d="M4 22v-5l8-2 8-8h20l9 8 11 2v5z" fill="${col}"/><circle cx="18" cy="23" r="5" fill="#222"/><circle cx="48" cy="23" r="5" fill="#222"/><circle cx="18" cy="23" r="2" fill="#ccc"/><circle cx="48" cy="23" r="2" fill="#ccc"/></svg>`}
-function cardHtml(c){return `${c.img?imgTag(c.img,"ci"):svg(R[c.r].col)}<b>${cn(c)}</b><span class="p">${money(c.price)}</span><br><span class="tag" style="background:${R[c.r].col}">${rn(c.r)}</span>`}
+function cardHtml(c){return `${c.img?imgTag(c.img,"ci"):svg(R[c.r].col)}<b>${cn(c)}</b><span class="p">${money(c.price)}</span><br><span class="tag" style="background:${R[c.r].col}">${rn(c.r)}</span>${c.tn?` <span class="tag" style="background:#555">⚙${c.tn}</span>`:""}`}
 const cashCard=t=>`<div style="font-size:40px;line-height:72px">💰</div><b>${tr("cash")}</b><span class="p">${money(t.price)}</span>`;
 function stackHtml(cars){
   if(cars.length===1)return cardHtml(cars[0]);
@@ -376,17 +435,6 @@ $("gsell").onclick=()=>{let tot=0,n=0,last=null;
   if(n){S.bal+=tot;sel=[];genShop();save();{const cnt=n,tt=tot,lid=last.id;RES=()=>`<span class="g">${tr("sold",cnt>1?cnt+" "+tr("pcs"):cn(BY(lid)),money(tt))}</span>`}render()}closeGot()};
 
 /* ===== коробка: ответ сохраняется сразу, анимация только показ ===== */
-function openBox(){
-  if(!canBox()||boxBusy)return;boxBusy=true;
-  const pool=CARS.filter(c=>c.r==="c"&&c.price<=330),win=pool[Math.floor(Math.random()*pool.length)],N=42,WI=96,wi=35;
-  S.inv.push(mk(win.id));S.xp+=5;save();
-  const items=Array.from({length:N},(_,i)=>i===wi?win:pool[Math.floor(Math.random()*pool.length)]);
-  $("cstrip").innerHTML=items.map(c=>`<div class="ci2" style="border-bottom:3px solid ${R[c.r].col}">${c.img?imgTag(c.img,"","height:78px"):svg(R[c.r].col,64,30)}<span>${cn(c)}</span></div>`).join("");
-  const st=$("cstrip");st.style.transition="none";st.style.transform="translateX(0)";$("caseov").classList.add("on");void st.offsetWidth;
-  const w=$("cwin").clientWidth,x=-(wi*WI+WI/2-w/2+(Math.random()-.5)*50);
-  st.style.transition="transform 5s cubic-bezier(.08,.6,.12,1)";st.style.transform=`translateX(${x}px)`;
-  setTimeout(()=>{$("caseov").classList.remove("on");boxBusy=false;render();showGot([win],tr("g_box"))},5500);
-}
 
 /* ===== дуэль ===== */
 function genOpp(sum){
@@ -404,7 +452,7 @@ function renderDuel(L){
   const p=$("dpanel");
   if(DU.searching){p.innerHTML=`<div class="note" style="font-size:15px;margin:14px 0">${tr("duel_search")}</div>`;return}
   if(!DU.opp){
-    p.innerHTML=(DU.msg?`<div id="dres" style="margin-bottom:10px">${DU.msg()}</div>`:"")+(cars.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(cars)}</div></div><button id="dcall" style="margin-top:10px">${tr("duel_call")}</button>`:`<div class="note">${tr("duel_pick")}</div>`);
+    p.innerHTML=(DU.msg?`<div id="dres" style="margin-bottom:10px">${DU.msg()}</div>`:"")+(cars.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(cars)}</div></div><button id="dcall" style="margin-top:10px">${tr("duel_call")}</button>`:`<button class="ghost" data-pickcars="1" style="margin:0">${tr("pick_btn")}</button>`);
     return}
   const opp=DU.opp.map(BY),pc=duelChance();
   p.innerHTML=`<div class="vs"><div class="car">${avTag(me().img,34)}<b style="min-height:0">${esc(me().name)}</b>${stackHtml(DU.mine)}</div><div class="arrow">⚔️</div><div class="car">${avTag(bot.img,34)}<b style="min-height:0">${bot.n[ix()]}</b>${stackHtml(opp)}</div></div>
@@ -421,7 +469,7 @@ function jpSegs(){const tot=JP.parts.reduce((s,x)=>s+x.value,0);let a=0;return J
 function renderJackpot(L){
   const cars=selCars(L),p=$("jpanel");
   if(JP.searching){p.innerHTML=`<div class="note" style="font-size:15px;margin:14px 0">${tr("jp_search")}</div>`;return}
-  if(!JP.parts){p.innerHTML=(JP.msg?`<div style="margin-bottom:10px">${JP.msg()}</div>`:"")+(cars.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(cars)}</div></div><button id="jcall" style="margin-top:10px">${tr("jp_join")}</button>`:`<div class="note">${tr("jp_pick")}</div>`);return}
+  if(!JP.parts){p.innerHTML=(JP.msg?`<div style="margin-bottom:10px">${JP.msg()}</div>`:"")+(cars.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(cars)}</div></div><button id="jcall" style="margin-top:10px">${tr("jp_join")}</button>`:`<button class="ghost" data-pickcars="1" style="margin:0">${tr("pick_btn")}</button>`);return}
   const tot=JP.parts.reduce((s,x)=>s+x.value,0);
   p.innerHTML=`<div class="row"><span>${tr("jp_total")}</span><b>${money(tot)}</b></div>`+JP.parts.map(x=>`<div class="row" style="justify-content:flex-start;gap:8px;font-size:13px"><i style="width:12px;height:12px;border-radius:50%;background:${x.col};flex:none"></i>${avTag(x.me?me().img:BOTS[x.bi].img,28)}<b style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(x.me?me().name:BOTS[x.bi].n[ix()])}</b><span style="white-space:nowrap">${(x.value/tot*100).toFixed(1)}% · ${money(x.value)}</span></div>`).join("")+
   `<div class="wheelbox"><div class="ptr"></div><canvas id="jwheel" width="540" height="540"></canvas></div><div class="note">${tr("jp_start")}</div>`;
@@ -445,18 +493,335 @@ function jpSpin(){
     render();if(wMe)showGot(got.map(c=>Object.assign({},c)),tr("g_jp"))},6700);
 }
 
+/* ===== задания MOBFARM обновляются каждые 1,5 часа ===== */
+const Q_MS=90*60*1000;
+const qProg=k=>Math.max(0,(S.st[k]||0)-((S.qbase||{})[k]||0));
+function qCheck(){if(Date.now()-S.q0>=Q_MS){S.q0=Date.now();S.qbase=Object.assign({},S.st);S.cl={};save();return true}return false}
+const fmtHMS=ms=>{const s=Math.max(0,Math.ceil(ms/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);return h+":"+String(m).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function qTimerUpdate(){$("qtimer").textContent=tr("q_reset",fmtHMS(Q_MS-(Date.now()-S.q0)))}
+
+/* ===== прокрутка как у коробки: коробка и утешительный приз ===== */
+function pickConsol(sum){const pool=NORMAL.filter(c=>c.price<=sum*.12);
+  return pool.length?{car:pool[Math.floor(Math.random()*pool.length)],pool}:{cash:Math.max(10,Math.round(sum*.1/10)*10)}}
+const caseItem=c=>c.coin?`<div class="ci2" style="border-bottom:3px solid var(--gold)"><span style="font-size:44px;line-height:78px">💰</span><span>+${money(c.amount)}</span></div>`:`<div class="ci2" style="border-bottom:3px solid ${R[c.r].col}">${c.img?imgTag(c.img,"","height:78px"):svg(R[c.r].col,64,30)}<span>${cn(c)}</span></div>`;
+function runCase(win,pool,title,done){
+  boxBusy=true;const N=42,WI=96,wi=35;
+  const items=Array.from({length:N},(_,i)=>i===wi?win:pool[Math.floor(Math.random()*pool.length)]);
+  $("caseov").querySelector(".gt").innerHTML=title;
+  $("cstrip").innerHTML=items.map(caseItem).join("");
+  const st=$("cstrip");st.style.transition="none";st.style.transform="translateX(0)";$("caseov").classList.add("on");void st.offsetWidth;
+  const w=$("cwin").clientWidth,x=-(wi*WI+WI/2-w/2+(Math.random()-.5)*50);
+  st.style.transition="transform 5s cubic-bezier(.08,.6,.12,1)";st.style.transform=`translateX(${x}px)`;
+  setTimeout(()=>{$("caseov").classList.remove("on");boxBusy=false;done()},5500);
+}
+function openBox(){
+  if(!canBox()||boxBusy)return;
+  const pool=CARS.filter(c=>c.r==="c"&&c.price<=330),win=pool[Math.floor(Math.random()*pool.length)];
+  S.inv.push(mk(win.id));S.xp+=5;save();
+  runCase(win,pool,tr("case_t"),()=>{render();showGot([win],tr("g_box"))});
+}
+function playConsol(c){
+  const win=c.car||{coin:true,amount:c.cash};
+  const pool=c.car?c.pool:Array.from({length:12},()=>({coin:true,amount:Math.max(10,Math.round(c.cash*(.5+Math.random()*1.5)/10)*10)}));
+  runCase(win,pool,tr("case_c"),()=>{render();if(c.car)showGot([c.car],tr("g_consol"));else showCash(c.cash,tr("g_consol"))});
+}
+
+/* ===== окно выбора машинок для ставки ===== */
+function drawSel(){
+  const L=inv();
+  $("selgrid").innerHTML=L.map((c,i)=>`<div class="car ${sel.includes(i)?"sel":""}" data-i="${i}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
+  $("seldone").textContent=tr("sel_done",sel.length);
+}
+function openSel(){if(spinning||boxBusy)return;drawSel();$("selov").classList.add("on")}
+
+/* ===== гараж ===== */
+let gsel=null;
+const carSpeed=c=>(160+55*Math.log(1+c.price/150))*(1+.07*(c.tn||0));
+const tuneCost=c=>Math.max(50,Math.round(BY(c.id).price*.18*((c.tn||0)+1)/10)*10);
+const racerCar=L=>L.find(c=>c.u===S.racer)||L.slice().sort((a,b)=>carSpeed(b)-carSpeed(a))[0]||null;
+const spdTxt=v=>Math.round(v/2)+" "+tr("kmh");
+function renderGarage(L){
+  $("ginv").innerHTML=L.map(c=>`<div class="car ${c.u===gsel?"sel":""}" data-u="${c.u}">${cardHtml(c)}<div class="note" style="margin:2px 0 0">${S.racer===c.u?"🏁 ":""}${spdTxt(carSpeed(c))}</div></div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
+  const c=L.find(x=>x.u===gsel),p=$("gpanel");
+  if(!c){p.innerHTML=`<div class="note">${tr("g_pick")}</div>`;return}
+  const max=(c.tn||0)>=5,cost=tuneCost(c),next=Object.assign({},c,{tn:(c.tn||0)+1});
+  p.innerHTML=`<div class="vs"><div class="car" style="width:55%">${cardHtml(c)}</div><div style="flex:1;font-size:14px">
+    <div class="row"><span>${tr("g_speed")}</span><b>${spdTxt(carSpeed(c))}</b></div>
+    <div class="row"><span>${tr("g_level")}</span><b>${c.tn||0} / 5</b></div>
+    <div class="bar"><i style="width:${(c.tn||0)/5*100}%;background:var(--accent)"></i></div>
+    ${max?`<div class="note">${tr("g_max")}</div>`:`<div class="note" style="text-align:left">${tr("g_next",spdTxt(carSpeed(next)))}</div>`}</div></div>
+    <button class="buy" data-tune="${c.u}" style="margin-top:10px" ${max||S.bal<cost||spinning?"disabled":""}>${max?tr("g_max"):tr("g_up",money(cost))}</button>
+    <button class="ghost" data-racer="${c.u}">${S.racer===c.u?tr("g_isracer"):tr("g_racer")}</button>`;
+}
+
+/* ===== гонки: лобби, 25 секунд ожидания, потом боты ===== */
+const TRACKS=[
+ {n:["Городская","City"],len:8000,A:70,w1:1800,B:30,w2:900,hw:100,obs:10,grass:"#3f8f4f",road:"#4a4a55"},
+ {n:["Серпантин","Mountain"],len:9500,A:90,w1:1800,B:35,w2:1000,hw:85,obs:14,grass:"#6b7f5a",road:"#55504a"},
+ {n:["Пустыня","Desert"],len:7000,A:50,w1:2200,B:20,w2:1100,hw:120,obs:7,grass:"#d9b46a",road:"#6b5f55"}];
+const trCenter=(T,d)=>T.A*Math.sin(d/T.w1*6.2832)+T.B*Math.sin(d/T.w2*6.2832+1.3);
+const RWAIT=25000,PRIZE=[300,180,100,40,0],PXP=[40,25,15,10,5];
+let RL={view:"idle",track:0,lobbies:[],w:null},RC=null;
+const botsOrder=()=>BOTS.map((_,i)=>i).sort(()=>Math.random()-.5);
+function genLobbies(){const bi=botsOrder();RL.lobbies=Array.from({length:4},(_,i)=>({id:i,host:bi[i%bi.length],track:Math.floor(Math.random()*TRACKS.length),n:1+Math.floor(Math.random()*3)}))}
+function openWait(track,pre){
+  const slots=[{me:true}].concat(pre||[]);while(slots.length<5)slots.push(null);
+  RL.w={track,t0:Date.now(),filled:false,slots};RL.view="wait";render()}
+function raceTick(){
+  const w=RL.w;if(!w||RL.view!=="wait")return;const el=Date.now()-w.t0;
+  if(!w.filled){
+    if(el>=RWAIT){const used=new Set(w.slots.filter(s=>s&&!s.me).map(s=>s.bi)),free=botsOrder().filter(b=>!used.has(b));
+      w.slots=w.slots.map(s=>s||{bi:free.shift(),filler:true});w.filled=true;w.t1=Date.now();render()}
+    else{const e=document.querySelector("[data-rtm]");if(e)e.textContent=Math.max(0,Math.ceil((RWAIT-el)/1000))}
+  }else{
+    const c=3-(Date.now()-w.t1)/1000;
+    if(c<=0)startRace();else{const e=document.querySelector("[data-rcd]");if(e)e.textContent=tr("race_go",Math.ceil(c))}
+  }
+}
+function renderRace(L){
+  const p=$("rpanel"),rc=racerCar(L),w=RL.w,x=ix();
+  if(RL.view==="rwait"){
+    const m=NET.rl,pls=m?m.players:[],left=m?Math.max(0,Math.ceil((m.left-(Date.now()-NET.rlAt))/1000)):25;
+    const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}</small></div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    p.innerHTML=`<div class="row"><b>${gwIcon(16)} ${tr("race_ranked")}</b><span>${pls.length}/5</span></div><div class="rslots">${slots}</div><div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><div class="note">${tr("race_ranked_rule",m?m.needed:3)}</div><button class="ghost" data-rc="rcancel">${tr("cancel")}</button>`;return}
+  if(RL.view==="wait"&&w){
+    const left=Math.max(0,Math.ceil((RWAIT-(Date.now()-w.t0))/1000));
+    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}</small></div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    p.innerHTML=`<div class="row"><b>${TRACKS[w.track].n[x]}</b><span>${w.slots.filter(Boolean).length}/5</span></div><div class="rslots">${slots}</div>`+
+      (w.filled?`<div class="note" style="font-size:18px;margin:12px 0"><b data-rcd>${tr("race_go",3)}</b></div><div class="note">${tr("race_filled")}</div>`:`<div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><button class="ghost" data-rc="cancel">${tr("cancel")}</button>`);
+    return}
+  if(!rc){p.innerHTML=`<div class="note">${tr("race_nocar")}</div>`;return}
+  const head=`<div class="vs"><div class="car" style="width:60%">${cardHtml(rc)}<div class="note" style="margin:2px 0 0">${tr("g_speed")}: ${spdTxt(carSpeed(rc))}</div></div></div>`;
+  if(RL.view==="create"){
+    p.innerHTML=head+`<h2>${tr("race_track")}</h2><div class="sw">${TRACKS.map((t,i)=>`<button data-rt="${i}" class="${RL.track===i?"on":""}" style="font-size:12px;padding:10px 2px">${t.n[x]}</button>`).join("")}</div><button style="margin-top:10px" data-rc="make">${tr("race_make")}</button><button class="ghost" data-rc="back">${tr("cancel")}</button>`;return}
+  if(RL.view==="list"){
+    p.innerHTML=head+`<h2>${tr("race_lobbies")}</h2>`+RL.lobbies.map(l=>`<div class="row" style="justify-content:flex-start;gap:10px;margin:8px 0">${avTag(BOTS[l.host].img,38)}<div style="flex:1;font-size:13px"><b>${BOTS[l.host].n[x]}</b><br><span class="note" style="margin:0">${TRACKS[l.track].n[x]} · ${l.n+1}/5</span></div><button class="buy" style="width:auto;padding:8px 14px" data-rl="${l.id}">${tr("race_enter")}</button></div>`).join("")+`<button class="ghost" data-rc="refresh">${tr("race_refresh")}</button><button class="ghost" data-rc="back">${tr("cancel")}</button>`;return}
+  p.innerHTML=head+`<div style="display:flex;gap:8px;margin-top:10px"><button data-rc="create">${tr("race_create")}</button><button data-rc="list">${tr("race_join")}</button></div><button class="ghost" data-rc="ranked" ${netOn()?"":"disabled"}>${gwIcon(16)} ${tr("race_ranked")}</button><div class="note">${netOn()?tr("race_ranked_note"):tr("net_need")}</div><button class="ghost" data-rc="garage">${tr("race_garage")}</button><div class="note">${tr("race_offline")}</div>`;
+}
+function startRace(){
+  const w=RL.w;if(!w)return;const L=inv(),mine=racerCar(L);
+  if(!mine){RL.view="idle";RL.w=null;render();return}
+  const parts=[{me:true,name:me().name,img:me().img,speed:carSpeed(mine)}];
+  w.slots.forEach(s=>{if(s&&!s.me){const b=BOTS[s.bi],pr=Math.max(100,Math.min(20000,mine.price*(.5+Math.random()*1.3)));
+    parts.push({me:false,name:b.n[ix()],img:b.img,speed:(160+55*Math.log(1+pr/150))*(.92+Math.random()*.16),skill:.55+Math.random()*.4})}});
+  const ti=w.track;RL.view="idle";RL.w=null;S.st.races++;save();runRace(parts,ti);
+}
+
+/* --- сама гонка: 2D, сверху окно с трассой, внизу руль --- */
+let wAng=0,wDrag=false,wStart=0,wBase=0,keyDir=0;
+function runRace(parts,ti,opts){
+  const T=TRACKS[ti];let seed=opts&&opts.seed||Math.floor(Math.random()*1e9);const rnd=()=>(seed=(seed*1664525+1013904223)%4294967296)/4294967296;
+  const obs=[];for(let i=0;i<T.obs;i++){const d=800+i*(T.len-1400)/T.obs+rnd()*200;obs.push({d,x:trCenter(T,d)+(rnd()-.5)*T.hw*1.3})}
+  RC={T,obs,opts:opts||{},t:0,count:opts&&opts.in?opts.in/1000:3.4,last:performance.now(),done:false,
+    acc:getComputedStyle(document.documentElement).getPropertyValue("--accent").trim()||"#ff5a1f",
+    parts:parts.map((p,i)=>{const im=new Image();im.src=p.img;return Object.assign({},p,{d:0,x:trCenter(T,0)+(i-2)*26,slow:0,fin:null,ph:p.ph!==undefined?p.ph:rnd()*6,hit:new Set(),im,v:0,td:0,tx:trCenter(T,0)+(i-2)*26})})};
+  wAng=0;$("rres").style.display="none";$("rres").innerHTML="";$("raceov").classList.add("on");
+  RC.raf=requestAnimationFrame(raceLoop);
+}
+function raceLoop(ts){
+  if(!RC)return;const dt=Math.min(.05,(ts-RC.last)/1000);RC.last=ts;
+  if(!wDrag)wAng=keyDir?keyDir*70:wAng*Math.pow(.03,dt);
+  $("rwheel").style.transform=`rotate(${wAng}deg)`;
+  raceUpdate(dt);raceSendPos(dt);raceDraw();
+  if(RC&&!RC.done)RC.raf=requestAnimationFrame(raceLoop);
+}
+function raceUpdate(dt){
+  const R_=RC,T=R_.T,me_=R_.parts[0];
+  if(R_.count>0){R_.count-=dt;return}
+  R_.t+=dt;
+  for(let i=0;i<R_.parts.length;i++){
+    const p=R_.parts[i];if(p.fin!==null)continue;
+    if(R_.opts.ranked){   // рейтинговая гонка: чужие игроки приходят с сервера, боты считаются по общей формуле
+      if(p.remote){p.d+=(p.td-p.d)*Math.min(1,dt*8);p.x+=(p.tx-p.x)*Math.min(1,dt*8);continue}
+      if(p.bot){p.d=botDist(p,R_.t);p.x=trCenter(T,p.d)+Math.sin(R_.t*.9+p.ph)*T.hw*.25;p.v=p.speed;if(p.d>=T.len&&p.fin===null)p.fin=R_.t;continue}
+    }
+    const c=trCenter(T,p.d);
+    if(i===0){const steer=Math.max(-1,Math.min(1,wAng/70));p.x+=steer*300*dt}
+    else{const tgt=c+Math.sin(R_.t*.9+p.ph)*T.hw*.35*(1-p.skill*.6);p.x+=Math.max(-300*dt,Math.min(300*dt,tgt-p.x))}
+    const off=Math.abs(p.x-c)>T.hw;
+    if(p.slow>0)p.slow-=dt;
+    p.v=p.speed*(off?.55:1)*(p.slow>0?.45:1)*(i===0?1:1+.05*Math.sin(R_.t*.7+p.ph));
+    p.d+=p.v*dt;
+    for(let k=0;k<R_.obs.length;k++){const o=R_.obs[k];
+      if(!p.hit.has(k)&&Math.abs(o.d-p.d)<14&&Math.abs(o.x-p.x)<20){p.hit.add(k);if(i===0||Math.random()<.5)p.slow=.9}}
+    if(p.d>=T.len){p.fin=R_.t;if(i===0){if(R_.opts.ranked){netSend({t:"fin"})}else raceFinish()}}
+  }
+}
+function raceSendPos(dt){
+  const R_=RC,me_=R_.parts[0];if(!R_.opts.ranked||R_.count>0||me_.fin!==null)return;
+  R_.pt=(R_.pt||0)+dt;if(R_.pt>=.1){R_.pt=0;netSend({t:"pos",d:Math.round(me_.d),x:Math.round(me_.x)})}
+}
+function raceDraw(){
+  const cv=$("rcv"),g=cv.getContext("2d"),W=360,H=440,k=.8,cy=330,kx=.7,T=RC.T,me_=RC.parts[0],camX=trCenter(T,me_.d);
+  g.fillStyle=T.grass;g.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=3){
+    const d=me_.d+(cy-y)/k,c=180+(trCenter(T,d)-camX)*kx,hw=T.hw*kx;
+    g.fillStyle=T.road;g.fillRect(c-hw,y,hw*2,3.2);
+    g.fillStyle=Math.floor(d/70)%2?"#e5384a":"#fff";g.fillRect(c-hw-5,y,5,3.2);g.fillRect(c+hw,y,5,3.2);
+    if(d>0&&Math.floor(d/90)%2){g.fillStyle="rgba(255,255,255,.5)";g.fillRect(c-1.5,y,3,3.2)}
+    if(d>=T.len&&d<T.len+28){for(let xx=c-hw;xx<c+hw;xx+=10){g.fillStyle=((Math.floor((xx-c+hw)/10)+Math.floor(y/3))%2)?"#fff":"#111";g.fillRect(xx,y,10,3.2)}}
+  }
+  for(const o of RC.obs){const y=cy-(o.d-me_.d)*k;if(y<-20||y>H+20)continue;const x=180+(o.x-camX)*kx;
+    g.fillStyle="#ff7a1a";g.beginPath();g.moveTo(x,y-11);g.lineTo(x+9,y+8);g.lineTo(x-9,y+8);g.closePath();g.fill();g.fillStyle="#fff";g.fillRect(x-5,y+1,10,3)}
+  const avatar=(p,x,y,r,ring)=>{g.save();g.beginPath();g.arc(x,y,r,0,7);g.clip();
+    if(p.im&&p.im.complete&&p.im.naturalWidth)g.drawImage(p.im,x-r,y-r,r*2,r*2);else{g.fillStyle="#888";g.fillRect(x-r,y-r,r*2,r*2)}
+    g.restore();g.lineWidth=2.5;g.strokeStyle=ring;g.beginPath();g.arc(x,y,r,0,7);g.stroke()};
+  // соперники показаны аватарками, а не машинками
+  for(let i=RC.parts.length-1;i>=1;i--){const p=RC.parts[i];let y=cy-(p.d-me_.d)*k,x=180+(p.x-camX)*kx,a=1;
+    if(y<48){y=48;a=.55}if(y>H-22){y=H-22;a=.55}x=Math.max(18,Math.min(W-18,x));g.globalAlpha=a;avatar(p,x,y,15,"#fff");g.globalAlpha=1}
+  // моя машинка
+  const mx=180+(me_.x-camX)*kx,steer=Math.max(-1,Math.min(1,wAng/70));
+  g.save();g.translate(mx,cy);g.rotate(steer*.2);g.fillStyle="#111";g.fillRect(-12,-14,5,10);g.fillRect(7,-14,5,10);g.fillRect(-12,8,5,10);g.fillRect(7,8,5,10);
+  g.fillStyle=RC.acc;g.beginPath();g.roundRect(-9,-19,18,38,5);g.fill();g.fillStyle="rgba(255,255,255,.75)";g.fillRect(-6,-8,12,9);g.restore();
+  // верхняя полоса: положение всех игроков вдоль трассы
+  g.fillStyle="rgba(0,0,0,.45)";g.fillRect(0,0,W,38);g.fillStyle="rgba(255,255,255,.5)";g.fillRect(24,18,312,3);g.font="12px sans-serif";g.fillText("🏁",330,14);
+  for(let i=RC.parts.length-1;i>=0;i--){const p=RC.parts[i];avatar(p,24+312*Math.min(1,p.d/T.len),19,i===0?10:8,i===0?RC.acc:"#fff")}
+  if(RC.count>0){g.fillStyle="rgba(0,0,0,.35)";g.fillRect(0,0,W,H);g.fillStyle="#fff";g.font="bold 90px sans-serif";g.textAlign="center";g.fillText(Math.max(1,Math.ceil(RC.count-.4))+"",W/2,H/2+30);g.textAlign="left"}
+  g.fillStyle="rgba(0,0,0,.5)";g.fillRect(6,H-24,86,18);g.fillStyle="#fff";g.font="11px sans-serif";g.fillText(Math.round(me_.v/2)+" "+tr("kmh"),12,H-11);
+  const place=1+RC.parts.slice(1).filter(b=>b.d>me_.d).length;
+  $("rpos").textContent=(me_.fin!==null?RC.place:place)+"/"+RC.parts.length;
+  const tt=RC.t;$("rtime").textContent=Math.floor(tt/60)+":"+String(Math.floor(tt%60)).padStart(2,"0");
+}
+function raceFinish(){
+  const R_=RC,me_=R_.parts[0];if(R_.done)return;R_.done=true;
+  // место: кто финишировал раньше или успел бы раньше по текущей скорости
+  const place=1+R_.parts.slice(1).filter(b=>(b.fin!==null?b.fin:R_.t+(R_.T.len-b.d)/Math.max(30,b.v||b.speed))<R_.t).length;
+  R_.place=place;const prize=PRIZE[place-1]||0;
+  S.bal+=prize;S.xp+=PXP[place-1]||5;if(place===1)S.st.racew++;save();
+  $("rres").innerHTML=`<div class="gbox" style="max-height:none"><div class="gt">${place===1?"🏆":"🏁"} ${tr("race_place",place)}</div><div style="font-size:15px;margin:6px 0 12px">${prize?`<b class="g">+${money(prize)}</b>`:tr("race_noprize")}</div><button id="rdone">${tr("race_done")}</button></div>`;
+  $("rres").style.display="block";raceDraw();
+}
+function raceClose(){if(RC&&RC.opts&&RC.opts.ranked&&!RC.done)netSend({t:"rquit"});if(RC){cancelAnimationFrame(RC.raf);RC=null}$("raceov").classList.remove("on");$("rres").style.display="none";render()}
+function wPoint(e){const r=$("rwheel").getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
+$("rwheel").onpointerdown=e=>{wDrag=true;wStart=wPoint(e);wBase=wAng;try{$("rwheel").setPointerCapture(e.pointerId)}catch(_){}};
+$("rwheel").onpointermove=e=>{if(!wDrag)return;let d=wPoint(e)-wStart;if(d>180)d-=360;if(d<-180)d+=360;wAng=Math.max(-100,Math.min(100,wBase+d))};
+$("rwheel").onpointerup=$("rwheel").onpointercancel=()=>{wDrag=false};
+document.addEventListener("keydown",e=>{if(!RC)return;if(e.key==="ArrowLeft")keyDir=-1;if(e.key==="ArrowRight")keyDir=1});
+document.addEventListener("keyup",e=>{if(e.key==="ArrowLeft"||e.key==="ArrowRight")keyDir=0});
+$("rquit").onclick=raceClose;
+$("rres").onclick=e=>{if(e.target.closest("#rdone"))raceClose()};
+
+/* ===== онлайн: золотые колёса выдаёт только сервер, клиенту они не доверены ===== */
+const NET={ws:null,status:HW_SERVER?"connecting":"off",me:null,rl:null,rlAt:0};
+const netOn=()=>NET.status==="online";
+const gwVal=()=>NET.me?NET.me.gw:(S.gwc||0),ratVal=()=>NET.me?NET.me.rating:(S.ratc||1000);
+const botDist=(b,t)=>t<=0?0:b.speed*(t+.8*(Math.sin(t*.5+b.ph)-Math.sin(b.ph)));   // та же формула, что на сервере
+const avOf=p=>p.photo||AVS[p.av]||AVS[0];
+function netSend(o){if(NET.ws&&NET.ws.readyState===1)NET.ws.send(JSON.stringify(o))}
+function netConnect(){
+  if(!HW_SERVER||NET.ws)return;NET.status="connecting";
+  let ws;try{ws=new WebSocket(HW_SERVER)}catch(e){NET.status="error";return}
+  NET.ws=ws;
+  ws.onopen=()=>netSend(TG&&TG.initData?{t:"auth",initData:TG.initData,av:Math.max(0,S.prof.av||0)}:{t:"auth",dev:me().name,av:Math.max(0,S.prof.av||0)});
+  ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(_){return}netMsg(m)};
+  ws.onclose=()=>{if(NET.ws===ws){NET.ws=null;NET.status="error";NET.me=null;if(RL.view==="rwait")RL.view="idle";if(DL.state!=="fight")DL.state="idle";render()}setTimeout(netConnect,5000)};
+}
+function netMsg(m){
+  if(m.t==="me"){NET.me=m;NET.status="online";S.gwc=m.gw;S.ratc=m.rating;save();if($("vaultov").classList.contains("on"))drawVault();render()}
+  else if(m.t==="vault"){NET.vault=m;if($("vaultov").classList.contains("on"))drawVault();render()}
+  else if(m.t==="warn"){if(DL.state==="search")DL.state="idle";DL.msg=()=>`<span class="r">${esc(String(m.msg))}</span>`;render()}
+  else if(m.t==="error"){NET.status="error";render()}
+  else if(m.t==="rlobby"){NET.rl=m;NET.rlAt=Date.now();RL.view="rwait";render()}
+  else if(m.t==="rstart")startRankedRace(m);
+  else if(m.t==="pos"){const p=RC&&RC.parts.find(x=>x.rid===m.id);if(p){p.td=m.d;p.tx=m.x}}
+  else if(m.t==="dq"){if(RC&&RC.opts&&RC.opts.ranked&&!RC.done){RC.done=true;showRankedBox(`<div class="gt">🚫 ${tr("rr_dq")}</div>`)}}
+  else if(m.t==="result")rankedResult(m);
+  else if(m.t==="dresult")liveDuelResult(m);
+  else if(m.t==="dtimeout"){DL.state="idle";DL.msg=()=>`<span class="r">${tr("dl_none")}</span>`;render()}
+}
+function startRankedRace(m){
+  RL.view="idle";NET.rl=null;const myId=NET.me&&NET.me.id;
+  const parts=m.players.map(p=>p.bot?{me:false,bot:true,rid:p.id,name:BOTS[p.bi].n[ix()],img:BOTS[p.bi].img,speed:p.speed,ph:p.ph}
+    :p.id===myId?{me:true,name:me().name,img:me().img,speed:m.speed}
+    :{me:false,remote:true,rid:p.id,name:p.name,img:avOf(p),speed:m.speed});
+  parts.sort((a,b)=>(b.me?1:0)-(a.me?1:0));
+  runRace(parts,m.track,{ranked:true,in:m.in,seed:m.seed});
+}
+function showRankedBox(inner){$("rres").innerHTML=`<div class="gbox" style="max-height:none">${inner}<button id="rdone" style="margin-top:12px">${tr("race_done")}</button></div>`;$("rres").style.display="block"}
+function rankedResult(m){
+  if(NET.me){NET.me.gw=m.gw;NET.me.rating=m.rating}S.gwc=m.gw;S.ratc=m.rating;save();
+  if(RC&&RC.opts&&RC.opts.ranked&&!RC.done||(RC&&RC.opts&&RC.opts.ranked&&RC.parts[0].fin!==null)){
+    RC.done=true;RC.place=m.place;
+    const body=m.dq?`<div class="gt">🚫 ${tr("rr_dq")}</div>`:`<div class="gt">${m.place===1?"🏆":"🏁"} ${tr("race_place",m.place)}</div><div style="font-size:15px;margin:6px 0 4px">${m.ranked?(m.gain?`<b class="gold">${gwIcon(18)} ${tr("rr_gain",m.gain)}</b>`:tr("race_noprize"))+`<br>${tr("rr_rating",m.rating)}`:tr("rr_unranked")}</div>`;
+    showRankedBox(body);raceDraw();
+  }
+  render();
+}
+
+/* --- дуэль с живым игроком: исход решает сервер, ставок машинками нет --- */
+let DL={state:"idle",t0:0,res:null,msg:null};
+function liveFind(){const v=NET.vault;if(!netOn()||!v||spinning)return;const st=vsel.filter(u=>v.cars.some(c=>c.u===u));if(!st.length)return;DL.state="search";DL.t0=Date.now();DL.msg=null;netSend({t:"dq",stake:st});render()}
+function liveCancel(){netSend({t:"dq_leave"});DL.state="idle";render()}
+function liveDuelResult(m){
+  DL.state="fight";DL.res=m;DL.msg=null;vsel=[];render();
+  const p=m.p,pad=.12,a=m.win?p*(pad+Math.random()*(1-2*pad)):p+(1-p)*(pad+Math.random()*(1-2*pad));
+  spinning=true;jrot=0;
+  const cv=$("lwheel");if(cv){jrot+=360*5+(360-a*360);cv.style.transform=`rotate(${jrot}deg)`}
+  setTimeout(()=>{spinning=false;jrot=0;
+    if(NET.me)NET.me.gw=m.gw;S.gwc=m.gw;save();
+    const name=m.opp.name,lostIds=(m.lost||[]).map(c=>c.id);
+    DL.state="idle";
+    DL.msg=m.win?()=>`<span class="g">${tr("dl_win",esc(name))}</span><br><span class="${m.gain?"gold":""}">${m.gain?tr("dl_win_gw"):tr("dl_nogw")}</span>`:()=>`<span class="r">${tr("dl_lose",esc(name))}</span><br>${tr("dl_lostc",lostIds.map(i=>cn(BY(i))).join(", "))}`;
+    render();if(m.win&&m.got&&m.got.length)showVaultGot(m.got.map(vCar),tr("g_vault"),m.gain)},6700);
+}
+function showGw(n,title){gotCars=[];$("gt").innerHTML=title;const g=$("gcar");g.className="gcars";g.innerHTML=`<div style="line-height:1.1">${gwIcon(84)}</div><b style="font-size:24px;min-height:0">+${n}</b>`;$("gsell").style.display="none";$("gok").textContent=tr("ok");$("got").classList.add("on");boom()}
+function renderLive(){
+  const p=$("livecard"),head=`<h2 style="margin-top:0">${tr("dl_title")}</h2>`,v=NET.vault;
+  if(DL.state==="search"){p.innerHTML=head+`<div class="note" style="font-size:15px;margin:10px 0" data-dls>${tr("dl_search",Math.floor((Date.now()-DL.t0)/1000))}</div><button class="ghost" data-dl="cancel">${tr("cancel")}</button>`;return}
+  if(DL.state==="fight"&&DL.res){const m=DL.res;
+    p.innerHTML=head+`<div class="vs"><div class="car">${avTag(me().img,40)}<b style="min-height:0">${esc(me().name)}</b></div><div class="arrow">⚔️</div><div class="car">${avTag(avOf(m.opp),40)}<b style="min-height:0">${esc(m.opp.name)}</b><span class="p">ID ${esc(m.opp.pid||"")}</span></div></div><div class="wheelbox"><div class="ptr"></div><canvas id="lwheel" width="540" height="540"></canvas><div class="hub"><span>${Math.round(m.p*100)}%</span><small>${tr("you")}</small></div></div>`;
+    drawSegs($("lwheel"),[[0,1,"#e5384a"],[0,m.p,"#3b82f6"]]);return}
+  const st=v?vsel.filter(u=>v.cars.some(c=>c.u===u)).map(u=>vCar(v.cars.find(c=>c.u===u))):[];
+  p.innerHTML=head+(DL.msg?`<div style="margin-bottom:10px">${DL.msg()}</div>`:"")+`<div class="note" style="margin-top:0;text-align:left">${tr("dl_rule")}</div><div class="row"><span>${tr("vault_title")}</span><b>${v?v.cars.length:0} ${tr("pcs")}</b></div>`+(st.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(st)}</div></div>`:"")+`<button class="ghost" data-dl="vault" ${netOn()&&v?"":"disabled"}>${tr(st.length?"vault_change":"vault_pick")}</button><button style="margin-top:8px" data-dl="find" ${netOn()&&st.length&&!spinning?"":"disabled"}>${tr("dl_find")}</button><div class="note">${netOn()?tr("dl_ratio"):tr("net_need")}</div>`;
+}
+$("livecard").onclick=e=>{const b=e.target.closest("[data-dl]");if(!b)return;const a=b.dataset.dl;if(a==="find")liveFind();else if(a==="vault")openVault();else liveCancel()};
+/* --- онлайн-коллекция: хранится на сервере, ставки и покупки проверяет сервер --- */
+let vsel=[],vtab="mine";
+const vCar=c=>Object.assign({},BY(c.id),{u:c.u});
+function showVaultGot(cars,title,gain){showGot(cars,title);$("gsell").style.display="none";$("gok").textContent=tr("ok");if(gain)$("gt").innerHTML=title+`<br><span class="gold">${gwIcon(18)} +${gain}</span>`}
+function openVault(){if(!netOn()||!NET.vault||spinning)return;vtab="mine";drawVault();$("vaultov").classList.add("on")}
+function drawVault(){
+  const v=NET.vault;if(!v)return;$("vgw").innerHTML=gwIcon(16)+" "+gwVal();
+  $("vtabs").innerHTML=`<button data-vt="mine" class="${vtab==="mine"?"on":""}">${tr("vault_mine")}</button><button data-vt="buy" class="${vtab==="buy"?"on":""}">${tr("vault_buy")}</button>`;
+  if(vtab==="mine"){
+    vsel=vsel.filter(u=>v.cars.some(c=>c.u===u));
+    $("vgrid").innerHTML=v.cars.map(c=>`<div class="car ${vsel.includes(c.u)?"sel":""}" data-vu="${c.u}">${cardHtml(vCar(c))}</div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
+    $("vdone").textContent=tr("sel_done",vsel.length);
+  }else{
+    $("vgrid").innerHTML=v.shop.map(s=>`<div class="car" data-vb="${s.id}">${cardHtml(BY(s.id))}<div style="margin-top:4px"><b class="gold" style="display:inline;min-height:0">${gwIcon(14)} ${s.cost}</b></div></div>`).join("");
+    $("vdone").textContent=tr("close");
+  }
+}
+$("vtabs").onclick=e=>{const b=e.target.closest("[data-vt]");if(!b)return;vtab=b.dataset.vt;drawVault()};
+$("vgrid").onclick=e=>{
+  const u=e.target.closest("[data-vu]");
+  if(u){const id=+u.dataset.vu;vsel=vsel.includes(id)?vsel.filter(x=>x!==id):(vsel.length<5?vsel.concat(id):vsel);drawVault();return}
+  const b=e.target.closest("[data-vb]");if(b)netSend({t:"vbuy",id:+b.dataset.vb})};
+$("vdone").onclick=()=>{$("vaultov").classList.remove("on");render()};
+function renderProfileCard(){
+  const un=NET.me&&NET.me.username||(tgUser&&tgUser.username)||"";
+  $("pid").textContent=NET.me?NET.me.pid:S.pid;
+  $("puser").textContent=un?"@"+un:(tgUser?tr("no_username"):"—");
+  const locked=!!tgUser||!!S.prof.locked;
+  $("nick").disabled=locked;$("nicksave").style.display=locked?"none":"block";
+  if(locked)$("nick").value=me().name;
+  $("nickhint").textContent=tgUser?tr("nick_tg"):(locked?tr("nick_locked"):tr("nick_once"));
+}
+setInterval(()=>{if(DL.state==="search"){const e=document.querySelector("[data-dls]");if(e)e.textContent=tr("dl_search",Math.floor((Date.now()-DL.t0)/1000))}
+  if(RL.view==="rwait"&&NET.rl){const e=document.querySelector("[data-rtm]");if(e)e.textContent=Math.max(0,Math.ceil((NET.rl.left-(Date.now()-NET.rlAt))/1000))}},500);
+
 /* ===== отрисовка ===== */
 function setBadge(){$("bdg").style.display=S.dep.some(readyD)&&curTab!=="m"?"flex":"none"}
 function render(){
   const L=inv();sel=sel.filter(i=>i<L.length);const cars=selCars(L);
-  $("bal").textContent=tr("lv")+lvl()+" · "+money(S.bal);$("bal2").textContent=money(S.bal);
+  $("bal").textContent=tr("lv")+lvl()+" · "+money(S.bal);$("bal2").textContent=money(S.bal);$("gwchip").innerHTML=gwIcon(16)+" "+gwVal();
   $("res").innerHTML=RES?RES():"";
-  $("bsw").innerHTML=`<button data-sub="d" class="${bsub==="d"?"on":""}">⚔️ ${tr("tab_d")}</button><button data-sub="j" class="${bsub==="j"?"on":""}">🎰 ${tr("tab_j")}</button>`;
+  $("bsw").innerHTML=`<button data-sub="d" class="${bsub==="d"?"on":""}">⚔️ ${tr("tab_d")}</button><button data-sub="j" class="${bsub==="j"?"on":""}">🎰 ${tr("tab_j")}</button><button data-sub="r" class="${bsub==="r"?"on":""}">🏁 ${tr("tab_r")}</button>`;
   $("count").textContent=`— ${L.length} ${tr("pcs")} · ${money(sumP(L))}`;
   const grid=L.map((c,i)=>`<div class="car ${sel.includes(i)?"sel":""}" data-i="${i}">${cardHtml(c)}</div>`).join("")||'<div class="note" style="grid-column:1/4">—</div>';
   $("inv").innerHTML=grid;$("dinv").innerHTML=grid;$("jinv").innerHTML=grid;
   const t=cars.length?target():null;
-  $("from").innerHTML=cars.length?stackHtml(cars):`<div style="padding:18px 0;color:var(--muted)">${tr("pick")}</div>`;
+  $("from").innerHTML=cars.length?stackHtml(cars):`<button class="ghost" style="margin:0;padding:14px 6px;font-size:14px">${tr("pick")}</button>`;
   $("to").innerHTML=t?(t.cash?cashCard(t):cardHtml(t)):`<div style="padding:18px 0;color:var(--muted)">?</div>`;
   const ch=totalChance(),bp=bonusPct(),sum=sumP(cars);
   $("mult").textContent=t?"×"+(t.price/sum).toFixed(1):"—";
@@ -467,13 +832,13 @@ function render(){
   $("spin").disabled=!t||spinning;
   const sb=$("sell");sb.style.display=cars.length?"block":"none";sb.disabled=spinning;
   if(cars.length)sb.textContent=cars.length===1?tr("sell_btn",cn(cars[0]),money(sellPrice(cars[0]))):tr("sell_sel",cars.length,money(cars.reduce((s,c)=>s+sellPrice(c),0)));
-  drawWheel();renderDuel(L);renderJackpot(L);
+  drawWheel();renderDuel(L);renderJackpot(L);renderGarage(L);renderRace(L);renderLive();renderProfileCard();qTimerUpdate();
 
   const box=canBox();
   $("offers").innerHTML=(box?`<div class="card offer"><div class="car" style="border:0">${imgTag(BOXIMG,"ci")}</div><div class="info"><b>${tr("box_t")}</b><span class="note" style="display:block;text-align:left">${tr("box_d")}</span><button class="buy" data-box="1" style="margin-top:8px" ${boxBusy?"disabled":""}>${tr("open")}</button></div></div>`:"")+
   (S.shop.length?S.shop.map(id=>{const o=BY(id);return `<div class="card offer"><div class="car">${cardHtml(o)}</div><div class="info">${tr("price")}: <b>${money(o.price)}</b><span class="note" style="display:block;text-align:left">${tr("left")}: ${money(S.bal-o.price)}</span><button class="buy" data-b="${id}" style="margin-top:8px">${tr("buy")}</button></div></div>`}).join(""):(box?"":`<div class="card note">${tr("nomoney")}</div>`));
 
-  $("quests").innerHTML=QUESTS.map(q=>{const v=Math.min(S.st[q.k]||0,q.n),done=v>=q.n,got=S.cl[q.id],car=BY(q.car);
+  $("quests").innerHTML=QUESTS.map(q=>{const v=Math.min(qProg(q.k),q.n),done=v>=q.n,got=S.cl[q.id],car=BY(q.car);
     return `<div class="card offer"><div class="car">${cardHtml(car)}</div><div class="info"><b>${tr("q"+q.id)}</b><div class="bar"><i style="width:${v/q.n*100}%"></i></div>${v}/${q.n}<button class="buy" data-q="${q.id}" style="margin-top:8px" ${done&&!got?"":"disabled"}>${got?tr("claimed"):done?tr("claim"):tr("inprog")}</button></div></div>`}).join("");
 
   // чёрный рынок: машинки в работе
@@ -494,8 +859,8 @@ function render(){
   const lv=lvl(),lo=(lv-1)**2*40,hi=lv**2*40,sp=S.st.spins,wn=S.st.wins,wr=sp?(wn/sp*100).toFixed(1)+"%":"—";
   const best=L.reduce((b,x)=>!b||x.price>b.price?x:b,null);
   $("prof").innerHTML=`<div class="card" style="text-align:center"><div style="font-size:36px">🏅</div><h2 style="margin:4px 0">${tr("level")} ${lv}</h2><div class="bar"><i style="width:${(S.xp-lo)/(hi-lo)*100}%"></i></div><div class="note" style="margin-top:0">${tr("xp_to",S.xp,hi,lv+1)}</div></div>
-  <div class="card"><div class="row"><span>${tr("avgwin")}</span><b class="${sp&&wn/sp>=.5?"g":"r"}">${wr}</b></div><div class="row"><span>${tr("spins")}</span><b>${sp}</b></div><div class="row"><span>${tr("wins")}</span><b class="g">${wn}</b></div><div class="row"><span>${tr("losses")}</span><b class="r">${sp-wn}</b></div><div class="row"><span>${tr("sth")}</span><b class="gold">${S.st.gold||0}</b></div><div class="row"><span>${tr("duels")}</span><b>${S.st.dwins} / ${S.st.duels}</b></div><div class="row"><span>${tr("jackpots")}</span><b>${S.st.jpw} / ${S.st.jp}</b></div><div class="row"><span>${tr("bs")}</span><b>${S.st.buys} / ${S.st.sells}</b></div></div>
-  <div class="card"><div class="row"><span>${tr("balance")}</span><b>${money(S.bal)}</b></div><div class="row"><span>${tr("colval")}</span><b>${money(sumP(L))}</b></div><div class="row"><span>${tr("best")}</span><b style="text-align:right">${best?cn(best):"—"}</b></div></div><div class="note">${tr("xp_note")}</div>`;
+  <div class="card"><div class="row"><span>${tr("avgwin")}</span><b class="${sp&&wn/sp>=.5?"g":"r"}">${wr}</b></div><div class="row"><span>${tr("spins")}</span><b>${sp}</b></div><div class="row"><span>${tr("wins")}</span><b class="g">${wn}</b></div><div class="row"><span>${tr("losses")}</span><b class="r">${sp-wn}</b></div><div class="row"><span>${tr("sth")}</span><b class="gold">${S.st.gold||0}</b></div><div class="row"><span>${tr("duels")}</span><b>${S.st.dwins} / ${S.st.duels}</b></div><div class="row"><span>${tr("jackpots")}</span><b>${S.st.jpw} / ${S.st.jp}</b></div><div class="row"><span>${tr("races")}</span><b>${S.st.racew} / ${S.st.races}</b></div><div class="row"><span>${tr("bs")}</span><b>${S.st.buys} / ${S.st.sells}</b></div></div>
+  <div class="card"><div class="row"><span>${tr("gw")}</span><b class="gold">${gwIcon(16)} ${gwVal()}</b></div><div class="row"><span>${tr("rating")}</span><b>${ratVal()}</b></div><div class="row"><span>${tr("net_status")}</span><b>${tr("net_"+NET.status)}</b></div><div class="row"><span>${tr("balance")}</span><b>${money(S.bal)}</b></div><div class="row"><span>${tr("colval")}</span><b>${money(sumP(L))}</b></div><div class="row"><span>${tr("best")}</span><b style="text-align:right">${best?cn(best):"—"}</b></div></div><div class="note">${tr("gw_hint")}</div><div class="note">${tr("xp_note")}</div>`;
 
   $("themes").innerHTML=Object.entries(THEMES).map(([k,v])=>`<button data-th="${k}" class="${S.set.th===k?"on":""}"><i style="background:${v[2]}"></i>${v[ix()]}</button>`).join("");
   $("modes").innerHTML=Object.entries(MODES).map(([k,v])=>`<button data-md="${k}" class="${S.set.mode===k?"on":""}">${v[ix()]}</button>`).join("");
@@ -509,7 +874,7 @@ function render(){
 function showTab(){
   document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x.dataset.t===curTab));
   $("gear").classList.toggle("on",curTab==="x");
-  ["w","d","j","s","q","m","p","x"].forEach(k=>$("sec-"+k).classList.toggle("on",curTab==="b"?k===bsub:k===curTab));
+  ["w","d","j","r","g","s","q","m","p","x"].forEach(k=>$("sec-"+k).classList.toggle("on",curTab==="b"?k===bsub:k===curTab));
   $("bsw").style.display=curTab==="b"?"grid":"none";setBadge();window.scrollTo(0,0)}
 $("tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;curTab=b.dataset.t;showTab()};
 $("gear").onclick=()=>{curTab="x";showTab()};
@@ -527,7 +892,7 @@ $("offers").onclick=e=>{
   S.bal-=c.price;S.inv.push(mk(c.id));S.st.buys++;S.xp+=5;genShop();save();render();showGot([c],tr("g_buy"))};
 $("refresh").onclick=()=>{genShop();save();render()};
 $("quests").onclick=e=>{const b=e.target.closest("[data-q]");if(!b)return;const q=QUESTS.find(x=>x.id===+b.dataset.q);
-  if(!q||S.cl[q.id]||(S.st[q.k]||0)<q.n)return;S.cl[q.id]=1;S.xp+=50;S.inv.push(mk(q.car));save();render();showGot([BY(q.car)],tr("g_quest"))};
+  if(!q||S.cl[q.id]||qProg(q.k)<q.n)return;S.cl[q.id]=1;S.xp+=50;S.inv.push(mk(q.car));save();render();showGot([BY(q.car)],tr("g_quest"))};
 $("mk").onclick=e=>{const b=e.target.closest("[data-mk]");if(!b||spinning)return;
   const t=target();if(!sel.length||!t)return;const p=+b.dataset.mk,cost=bonusCost(p,t),cur=bonusPct();
   if(S.bal<cost||cur+p>40)return;S.bal-=cost;S.bonus={pct:cur+p,key:stakeKey()+">"+(t.cash?"cash":t.id)};save();render()};
@@ -537,11 +902,11 @@ $("mk2").onclick=e=>{
     $("pgrid").innerHTML=inv().map((c,i)=>`<div class="car" data-pi="${i}">${cardHtml(c)}</div>`).join("");$("pick").classList.add("on")}};
 // машинка уходит на чёрный рынок на 1 минуту, потом возвращается дороже на 100–150 ₽
 $("pgrid").onclick=e=>{const el=e.target.closest("[data-pi]");if(!el||S.bal<INC_COST)return;const i=+el.dataset.pi,o=S.inv[i];if(!o)return;
-  S.bal-=INC_COST;S.inv.splice(i,1);S.dep.push({id:o.id,pb:o.pb||0,t0:Date.now(),amt:100+Math.floor(Math.random()*51)});sel=[];
+  S.bal-=INC_COST;S.inv.splice(i,1);S.dep.push({id:o.id,u:o.u,tn:o.tn||0,pb:o.pb||0,t0:Date.now(),amt:100+Math.floor(Math.random()*51)});sel=[];
   $("pick").classList.remove("on");save();render()};
 $("pcancel").onclick=()=>$("pick").classList.remove("on");
 $("mk3").onclick=e=>{const b=e.target.closest("[data-claim]");if(!b)return;const d=S.dep[+b.dataset.claim];if(!d||!readyD(d))return;
-  S.dep.splice(+b.dataset.claim,1);S.inv.push({id:d.id,pb:d.pb+d.amt});save();render();
+  S.dep.splice(+b.dataset.claim,1);S.inv.push({id:d.id,u:d.u||++S.uid,tn:d.tn||0,pb:d.pb+d.amt});save();render();
   const c=BY(d.id);showGot([Object.assign({},c,{price:c.price+d.pb+d.amt})],tr("g_dep"))};
 $("themes").onclick=e=>{const b=e.target.closest("[data-th]");if(!b)return;S.set.th=b.dataset.th;applyTheme();save();render()};
 $("modes").onclick=e=>{const b=e.target.closest("[data-md]");if(!b)return;S.set.mode=b.dataset.md;applyTheme();save();render()};
@@ -549,8 +914,10 @@ $("langs").onclick=e=>{const b=e.target.closest("[data-lg]");if(!b)return;if(S.s
 $("curs").onclick=e=>{const b=e.target.closest("[data-cu]");if(!b)return;if(S.set.cur===b.dataset.cu)return;S.set.cur=b.dataset.cu;save();render()};
 $("reset").onclick=()=>{if(spinning||boxBusy)return;const st=S.set,pf=S.prof;S=fresh();S.set=st;S.prof=pf;genShop();sel=[];DU={bot:0,mine:null,opp:null,msg:""};JP={searching:false,parts:null,mine:null,msg:""};RES=null;nextGold();save();render()};
 $("avs").onclick=e=>{const b=e.target.closest("[data-av]");if(!b)return;S.prof.av=+b.dataset.av;if(tgUser&&S.prof.av!==-1)S.prof.custom=true;save();render()};
-$("nick").oninput=e=>{S.prof.name=e.target.value.slice(0,16);S.prof.custom=!!e.target.value.trim();save()};
+$("nicksave").onclick=()=>{if(tgUser||S.prof.locked)return;const n=$("nick").value.trim().slice(0,16);if(!n)return;S.prof.name=n;S.prof.locked=true;save();render()};   // ник можно задать один раз
+$("pidcopy").onclick=async()=>{const ok=await copyText(NET.me?NET.me.pid:S.pid);$("pidcopy").textContent=ok?tr("copied"):tr("copy");setTimeout(()=>{$("pidcopy").textContent=tr("copy")},1500)};
 $("jpanel").onclick=e=>{
+  if(e.target.closest("[data-pickcars]")){openSel();return}
   if(!e.target.closest("#jcall"))return;const cars=selCars(inv());if(!cars.length||spinning||JP.searching)return;
   JP.searching=true;JP.msg="";render();
   setTimeout(()=>{
@@ -580,8 +947,32 @@ $("scopy").onclick=async()=>{
   copyTimer=setTimeout(()=>{$("scopy").textContent=tr("copy")},1800)};
 $("tgopen").onclick=()=>{if(TG&&TG.openTelegramLink){try{TG.openTelegramLink(SHARE_URL);return}catch(e){}}window.open(SHARE_URL,"_blank")};
 $("tguse").onclick=()=>{S.prof.name=tgName.slice(0,16);if(tgAv)S.prof.av=-1;$("nick").value=S.prof.name;save();render()};
+$("from").onclick=()=>openSel();
+$("selgrid").onclick=e=>{const el=e.target.closest(".car");if(!el)return;const i=+el.dataset.i;sel=sel.includes(i)?sel.filter(x=>x!==i):sel.concat(i).sort((a,b)=>a-b);drawSel()};
+$("seldone").onclick=()=>{$("selov").classList.remove("on");RES=null;if(!DU.opp)DU.msg="";render()};
+$("ginv").onclick=e=>{const el=e.target.closest(".car");if(!el)return;gsel=+el.dataset.u;render()};
+$("gpanel").onclick=e=>{
+  const t=e.target.closest("[data-tune]");
+  if(t){const o=S.inv.find(x=>x.u===+t.dataset.tune);if(!o)return;const c=inv().find(x=>x.u===o.u),cost=tuneCost(c);if((o.tn||0)>=5||S.bal<cost)return;S.bal-=cost;o.tn=(o.tn||0)+1;save();render();return}
+  const r=e.target.closest("[data-racer]");if(r){S.racer=+r.dataset.racer;save();render()}};
+$("rpanel").onclick=e=>{
+  const rt=e.target.closest("[data-rt]");if(rt){RL.track=+rt.dataset.rt;render();return}
+  const rl=e.target.closest("[data-rl]");
+  if(rl){const l=RL.lobbies.find(x=>x.id===+rl.dataset.rl);if(!l)return;const others=botsOrder().filter(b=>b!==l.host).slice(0,l.n-1);openWait(l.track,[{bi:l.host}].concat(others.map(bi=>({bi}))));return}
+  const b=e.target.closest("[data-rc]");if(!b)return;const a=b.dataset.rc;
+  if(a==="create"){RL.view="create";render()}
+  else if(a==="list"){genLobbies();RL.view="list";render()}
+  else if(a==="refresh"){genLobbies();render()}
+  else if(a==="back"){RL.view="idle";render()}
+  else if(a==="make")openWait(RL.track,[]);
+  else if(a==="cancel"){RL.view="idle";RL.w=null;render()}
+  else if(a==="ranked"){if(!netOn())return;NET.rl=null;RL.view="rwait";netSend({t:"rq"});render()}
+  else if(a==="rcancel"){netSend({t:"rq_leave"});RL.view="idle";render()}
+  else if(a==="garage"){curTab="g";showTab()}};
+setInterval(()=>{qTimerUpdate();if(qCheck()&&!spinning&&!boxBusy)render()},1000);setInterval(raceTick,500);
 $("bots").onclick=e=>{const b=e.target.closest("[data-bot]");if(!b||DU.opp)return;DU.bot=+b.dataset.bot;render()};
 $("dpanel").onclick=e=>{
+  if(e.target.closest("[data-pickcars]")){openSel();return}
   if(e.target.closest("#dcall")){const cars=selCars(inv());if(!cars.length||spinning||DU.searching)return;
     DU.searching=true;DU.msg="";render();
     setTimeout(()=>{DU.mine=cars.map(c=>Object.assign({},c));DU.mine.ids=cars.map(c=>c.id);DU.bot=Math.floor(Math.random()*BOTS.length);DU.opp=genOpp(sumP(cars));DU.searching=false;render();setTimeout(duelSpin,1400)},1200);return}
@@ -608,7 +999,7 @@ function duelSpin(){
 
 $("spin").onclick=()=>{
   const L=inv(),t=target();if(!t||spinning||!sel.length)return;
-  const stakeIds=selCars(L).map(c=>c.id),names=()=>stakeIds.map(i=>cn(BY(i))).join(", ");
+  const stake0=sumP(selCars(L)),stakeIds=selCars(L).map(c=>c.id),names=()=>stakeIds.map(i=>cn(BY(i))).join(", ");
   spinning=true;$("spin").disabled=true;RES=null;$("res").innerHTML="";
   const ch=totalChance(),g=gd(),roll=Math.random();
   const out=roll<ch?"win":(roll>=1-g?"gold":"lose"),pad=.12,j=()=>pad+Math.random()*(1-2*pad);
@@ -617,15 +1008,17 @@ $("spin").onclick=()=>{
   $("wheel").style.transform=`rotate(${rot}deg)`;
   // исход применяется и сохраняется сразу, анимация только показывает его
   [...sel].sort((x,y)=>y-x).forEach(i=>S.inv.splice(i,1));
-  S.st.spins++;S.xp+=10;S.bonus=null;if(S.luck>0)S.luck--;let got=null,titleKey="",msg=null,cashAmt=0;
+  S.st.spins++;S.xp+=10;S.bonus=null;if(S.luck>0)S.luck--;let got=null,titleKey="",msg=null,cashAmt=0,consol=null;
   if(out==="win"&&t.cash){S.bal+=t.price;S.st.wins++;S.xp+=25;cashAmt=t.price;msg=()=>`<span class="g">${tr("r_cash",money(t.price))}</span>`}
   else if(out==="win"){S.inv.push(mk(t.id));S.st.wins++;S.xp+=25;if("pat".includes(t.r))S.st.prem++;got=t;titleKey="g_win";msg=()=>`<span class="g">${tr("r_win",cn(t),money(t.price))}</span>`}
   else if(out==="gold"){const s=STH[Math.floor(Math.random()*STH.length)];S.inv.push(mk(s.id));S.st.wins++;S.st.gold++;S.xp+=150;S.st.prem++;got=s;titleKey="g_gold";msg=()=>`<span class="gold">${tr("r_gold",cn(s),money(s.price))}</span>`}
-  else msg=()=>`<span class="r">${tr("r_lose",names())}</span>`;
+  else{
+    if(Math.random()<.4){consol=pickConsol(stake0);if(consol.car)S.inv.push(mk(consol.car.id));else S.bal+=consol.cash}
+    msg=()=>`<span class="r">${tr("r_lose",names())}</span>`+(consol?`<br><span class="gold">${consol.car?tr("r_consol",cn(consol.car)):tr("r_consol_cash",money(consol.cash))}</span>`:"")}
   sel=[];save();
   setTimeout(()=>{spinning=false;RES=msg;nextGold();
     const w=$("wheel");w.style.transition="none";rot=0;w.style.transform="rotate(0deg)";void w.offsetWidth;w.style.transition="";
-    render();if(cashAmt)showCash(cashAmt,tr("g_cash"));else if(got)showGot([got],tr(titleKey))},6700);
+    render();if(cashAmt)showCash(cashAmt,tr("g_cash"));else if(got)showGot([got],tr(titleKey));else if(consol)playConsol(consol)},6700);
 };
 // таймеры чёрного рынка: обновляем цифры, а полный экран перерисовываем, только когда что-то стало готово
 setInterval(()=>{
@@ -633,16 +1026,16 @@ setInterval(()=>{
   const r=S.dep.filter(readyD).length;
   if(r!==lastReady&&!spinning&&!boxBusy&&!$("got").classList.contains("on")&&!$("pick").classList.contains("on"))render();else setBadge()},1000);
 
-S=load()||fresh();if(!S.shop.length)genShop();$("nick").value=S.prof.name||"";
+S=load()||fresh();if(!S.shop.length)genShop();qCheck();$("nick").value=S.prof.name||"";
 if(tgUser){
   // внутри Telegram профиль всегда берётся из Telegram: только никнейм и аватарка (пока игрок сам не поменял их)
-  if(!S.prof.custom){S.prof.name=tgName.slice(0,16);S.prof.av=-1;save();$("nick").value=S.prof.name}
+  S.prof.name=tgName.slice(0,16);S.prof.locked=true;if(!S.prof.custom)S.prof.av=-1;save();$("nick").value=S.prof.name;   // в Telegram ник берётся из Telegram и не меняется
   // если Telegram не прислал фото, пробуем публичную аватарку по @username
   if(!tgPhoto&&tgUser.username){const im=new Image();im.onload=()=>{tgAv=im.src;render()};im.src="https://t.me/i/userpic/320/"+encodeURIComponent(tgUser.username)+".jpg"}}
-else{$("tgcard").style.display="";$("tgon").style.display="none";$("tgoff").style.display=""}
+else{$("tgcard").style.display="";$("tgon").style.display="none";$("tgoff").style.display="";if((S.prof.name||"").trim())S.prof.locked=true}
 applyTheme();applyLang();
 try{const tg=window.Telegram&&window.Telegram.WebApp;if(tg){tg.ready();tg.expand()}}catch(e){}
-nextGold();render();showTab();
+nextGold();render();showTab();netConnect();
 </script>
 </body>
 </html>
