@@ -343,6 +343,9 @@ const GOLD_SIZE=.2;
 let S,sel=[],spinning=false,boxBusy=false,rot=0,drot=0,goldOn=false,curTab="w",lastReady=0,bsub="d",RES=null;
 let DU={bot:0,mine:null,opp:null,msg:"",searching:false};
 const en=()=>S.set.lang==="en",ix=()=>en()?1:0;
+const VERIFIED_IDS=["60097984"];
+const myPid=()=>String((typeof NET!=="undefined"&&NET.me&&NET.me.pid)||(typeof S!=="undefined"&&S&&S.pid)||"");
+const vbadge=pid=>VERIFIED_IDS.includes(String(pid||""))?` <span title="Verified" style="display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.05em;border-radius:50%;background:#2aabee;color:#fff;font-size:.7em;font-weight:800;vertical-align:middle">✓</span>`:"";
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const me=()=>({name:(S.prof.name||"").trim()||tgName.slice(0,16)||tr("player"),img:S.prof.av===-1&&tgAv?tgAv:(AVS[S.prof.av]||AVS[0])});
 const cn=c=>!en()&&c.ru?c.ru:c.name;
@@ -582,11 +585,11 @@ function renderRace(L){
   const p=$("rpanel"),rc=racerCar(L),w=RL.w,x=ix();
   if(RL.view==="rwait"){
     const m=NET.rl,pls=m?m.players:[],left=m?Math.max(0,Math.ceil((m.left-(Date.now()-NET.rlAt))/1000)):25;
-    const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}</small></div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}${vbadge(pls[i].pid)}</small></div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${gwIcon(16)} ${tr("race_ranked")}</b><span>${pls.length}/5</span></div><div class="rslots">${slots}</div><div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><div class="note">${tr("race_ranked_rule",m?m.needed:3)}</div><button class="ghost" data-rc="rcancel">${tr("cancel")}</button>`;return}
   if(RL.view==="wait"&&w){
     const left=Math.max(0,Math.ceil((RWAIT-(Date.now()-w.t0))/1000));
-    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}</small></div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid())}</small></div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${TRACKS[w.track].n[x]}</b><span>${w.slots.filter(Boolean).length}/5</span></div><div class="rslots">${slots}</div>`+
       (w.filled?`<div class="note" style="font-size:18px;margin:12px 0"><b data-rcd>${tr("race_go",3)}</b></div><div class="note">${tr("race_filled")}</div>`:`<div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><button class="ghost" data-rc="cancel">${tr("cancel")}</button>`);
     return}
@@ -769,7 +772,7 @@ function renderLive(){
   const p=$("livecard"),head=`<h2 style="margin-top:0">${tr("dl_title")}</h2>`,v=NET.vault;
   if(DL.state==="search"){p.innerHTML=head+`<div class="note" style="font-size:15px;margin:10px 0" data-dls>${tr("dl_search",Math.floor((Date.now()-DL.t0)/1000))}</div><button class="ghost" data-dl="cancel">${tr("cancel")}</button>`;return}
   if(DL.state==="fight"&&DL.res){const m=DL.res;
-    p.innerHTML=head+`<div class="vs"><div class="car">${avTag(me().img,40)}<b style="min-height:0">${esc(me().name)}</b></div><div class="arrow">⚔️</div><div class="car">${avTag(avOf(m.opp),40)}<b style="min-height:0">${esc(m.opp.name)}</b><span class="p">ID ${esc(m.opp.pid||"")}</span></div></div><div class="wheelbox"><div class="ptr"></div><canvas id="lwheel" width="540" height="540"></canvas><div class="hub"><span>${Math.round(m.p*100)}%</span><small>${tr("you")}</small></div></div>`;
+    p.innerHTML=head+`<div class="vs"><div class="car">${avTag(me().img,40)}<b style="min-height:0">${esc(me().name)}</b></div><div class="arrow">⚔️</div><div class="car">${avTag(avOf(m.opp),40)}<b style="min-height:0">${esc(m.opp.name)}${vbadge(m.opp.pid)}</b><span class="p">ID ${esc(m.opp.pid||"")}</span></div></div><div class="wheelbox"><div class="ptr"></div><canvas id="lwheel" width="540" height="540"></canvas><div class="hub"><span>${Math.round(m.p*100)}%</span><small>${tr("you")}</small></div></div>`;
     drawSegs($("lwheel"),[[0,1,"#e5384a"],[0,m.p,"#3b82f6"]]);return}
   const st=v?vsel.filter(u=>v.cars.some(c=>c.u===u)).map(u=>vCar(v.cars.find(c=>c.u===u))):[];
   p.innerHTML=head+(DL.msg?`<div style="margin-bottom:10px">${DL.msg()}</div>`:"")+`<div class="note" style="margin-top:0;text-align:left">${tr("dl_rule")}</div><div class="row"><span>${tr("vault_title")}</span><b>${v?v.cars.length:0} ${tr("pcs")}</b></div>`+(st.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(st)}</div></div>`:"")+`<button class="ghost" data-dl="vault" ${netOn()&&v?"":"disabled"}>${tr(st.length?"vault_change":"vault_pick")}</button><button style="margin-top:8px" data-dl="find" ${netOn()&&st.length&&!spinning?"":"disabled"}>${tr("dl_find")}</button><div class="note">${netOn()?tr("dl_ratio"):tr("net_need")}</div>`;
@@ -800,7 +803,7 @@ $("vgrid").onclick=e=>{
 $("vdone").onclick=()=>{$("vaultov").classList.remove("on");render()};
 function renderProfileCard(){
   const un=NET.me&&NET.me.username||(tgUser&&tgUser.username)||"";
-  $("pid").textContent=NET.me?NET.me.pid:S.pid;
+  $("pid").innerHTML=esc(NET.me?NET.me.pid:S.pid)+vbadge(NET.me?NET.me.pid:S.pid);
   $("puser").textContent=un?"@"+un:(tgUser?tr("no_username"):"—");
   const locked=!!tgUser||!!S.prof.locked;
   $("nick").disabled=locked;$("nicksave").style.display=locked?"none":"block";
