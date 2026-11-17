@@ -113,6 +113,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #rctl{display:flex;flex-direction:column;align-items:center;gap:2px}
 #rwheel{width:150px;height:150px;color:var(--text);touch-action:none}
 #rres{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:min(320px,90%);z-index:5;display:none}
+#showov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#showov.on{display:flex}#showov .gbox .ci{height:72px}#showov .gbox .car{font-size:11px}#showov .gbox svg{width:60px}
 #vaultov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#vaultov.on{display:flex}
 #nick:disabled{opacity:.75}
 #hshow .mini{margin:0;flex-wrap:nowrap;gap:3px}#hshow .mini .pic{height:24px}.hsph{font-size:16px;opacity:.55}
@@ -210,6 +211,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <div id="raceov"><div class="rhud"><b id="rpos">1/5</b><b id="rtime">0:00</b><button class="ghost" id="rquit">✕</button></div><canvas id="rcv" width="360" height="440"></canvas>
 <div id="rctl"><svg id="rwheel" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="9" fill="currentColor"/><path d="M50 50 L12 50 M50 50 L88 50 M50 50 L50 86" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><rect x="45" y="4" width="10" height="9" rx="2" fill="#e5384a"/></svg><div class="note" data-i="race_hint" style="margin:0"></div></div>
 <div id="rres"></div></div>
+<div id="showov"><div class="gbox"><div class="gt" data-i="vault_show"></div><div class="note" data-i="show_pick_note" style="margin:0 0 10px;text-align:left"></div><div class="grid" id="showpick" style="max-height:50vh;overflow:auto"></div><button id="showdone" style="margin-top:12px"></button></div></div>
 <div id="vaultov"><div class="gbox"><div class="gt"><span data-i="vault_title"></span> <span style="font-size:14px" id="vgw"></span></div><div class="note" data-i="vault_note" style="margin:0 0 10px;text-align:left"></div><div class="sw" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px" id="vtabs"></div><div class="grid" id="vgrid" style="max-height:42vh;overflow:auto"></div><button id="vdone" style="margin-top:12px"></button></div></div>
 <div id="got"><div class="gbox"><div class="gt" id="gt"></div><div class="gcars" id="gcar"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="sell" id="gsell" style="margin-top:0"></button><button id="gok" data-i="keep"></button></div></div></div>
 <div id="caseov"><div class="cbox"><div class="gt" data-i="case_t"></div><div class="cwin" id="cwin"><div class="cmark"></div><div id="cstrip"></div></div></div></div>
@@ -288,7 +290,7 @@ g_win:["✅ Успех!","✅ Success!"],g_gold:["🌟 ЗОЛОТО! Super Treas
 r_a:["Автограф","Signed"],
 nick_save:["Сохранить ник (навсегда)","Save nickname (forever)"],nick_tg:["Ник берётся из Telegram и не меняется.","The nickname comes from Telegram and can’t be changed."],nick_locked:["Ник сохранён и больше не меняется.","The nickname is saved and can’t be changed."],nick_once:["Ник можно задать один раз, потом изменить его будет нельзя.","You can set the nickname once; it can’t be changed afterwards."],
 pid_label:["ID игрока","Player ID"],no_username:["нет @username","no @username"],
-vault_title:["Онлайн-коллекция","Online collection"],vault_mine:["Мои","Mine"],vault_show:["⭐ Витрина","⭐ Showcase"],show_edit:["Изменить","Edit"],show_note:["Выбери до 3 машинок из онлайн-коллекции: их увидят все игроки в лобби гонок и в дуэлях. Нажми на машинку, чтобы поставить или убрать.","Pick up to 3 cars from your online collection: every player sees them in race lobbies and duels. Tap a car to add or remove it."],show_empty:["пусто","empty"],
+vault_title:["Онлайн-коллекция","Online collection"],vault_mine:["Мои","Mine"],vault_show:["⭐ Витрина","⭐ Showcase"],show_edit:["Изменить","Edit"],show_save:["Сохранить ({0}/3)","Save ({0}/3)"],show_pick_note:["Выбери до 3 машинок из своей коллекции. Нажми на машинку, чтобы поставить или убрать её.","Pick up to 3 cars from your collection. Tap a car to add or remove it."],show_net_note:["Другие игроки увидят витрину, когда игра подключена к серверу.","Other players will see your showcase once the game is connected to the server."],show_note:["Выбери до 3 машинок из онлайн-коллекции: их увидят все игроки в лобби гонок и в дуэлях. Нажми на машинку, чтобы поставить или убрать.","Pick up to 3 cars from your online collection: every player sees them in race lobbies and duels. Tap a car to add or remove it."],show_empty:["пусто","empty"],
 vault_buy:["Купить за 🛞","Buy with 🛞"],vault_pick:["📦 Выбрать ставку","📦 Choose stake"],vault_change:["📦 Изменить ставку","📦 Change stake"],
 vault_note:["Онлайн-коллекция хранится на сервере и отдельна от обычной: машинки в неё нельзя положить из игры, а выдаёт их только сервер. Стартовые машинки бесплатно, остальные за золотые колёса.","The online collection lives on the server and is separate from your normal one: you can’t put cars into it from the game, only the server hands them out. Starter cars are free, the rest cost golden wheels."],
 dl_ratio:["Соперника подбираем с похожей ставкой (разница в цене не больше чем втрое). Шанс считается по цене ставок.","We match opponents with a similar stake (price difference up to 3x). Odds follow the stake prices."],
@@ -593,7 +595,7 @@ function renderRace(L){
     p.innerHTML=`<div class="row"><b>${gwIcon(16)} ${tr("race_ranked")}</b><span>${pls.length}/5</span></div><div class="rslots">${slots}</div><div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><div class="note">${tr("race_ranked_rule",m?m.needed:3)}</div><button class="ghost" data-rc="rcancel">${tr("cancel")}</button>`;return}
   if(RL.view==="wait"&&w){
     const left=Math.max(0,Math.ceil((RWAIT-(Date.now()-w.t0))/1000));
-    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</small>${showStrip(NET.vault&&NET.vault.show&&NET.vault.show.map(u=>{const c=NET.vault.cars.find(x=>x.u===u);return c&&c.id}))}</div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</small>${showStrip(showCarIds())}</div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${TRACKS[w.track].n[x]}</b><span>${w.slots.filter(Boolean).length}/5</span></div><div class="rslots">${slots}</div>`+
       (w.filled?`<div class="note" style="font-size:18px;margin:12px 0"><b data-rcd>${tr("race_go",3)}</b></div><div class="note">${tr("race_filled")}</div>`:`<div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><button class="ghost" data-rc="cancel">${tr("cancel")}</button>`);
     return}
@@ -718,7 +720,7 @@ function netSend(o){if(NET.ws&&NET.ws.readyState===1)NET.ws.send(JSON.stringify(
 function netConnect(){
   if(!HW_SERVER||NET.ws)return;NET.status="connecting";
   let ws;try{ws=new WebSocket(HW_SERVER)}catch(e){NET.status="error";return}
-  NET.ws=ws;
+  NET.ws=ws;showSent="";
   ws.onopen=()=>netSend(TG&&TG.initData?{t:"auth",initData:TG.initData,av:Math.max(0,S.prof.av||0)}:{t:"auth",dev:me().name,av:Math.max(0,S.prof.av||0)});
   ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(_){return}netMsg(m)};
   ws.onclose=()=>{if(NET.ws===ws){NET.ws=null;NET.status="error";NET.me=null;if(RL.view==="rwait")RL.view="idle";if(DL.state!=="fight")DL.state="idle";render()}setTimeout(netConnect,5000)};
@@ -790,7 +792,7 @@ function showVaultGot(cars,title,gain){showGot(cars,title);$("gsell").style.disp
 function openVault(){if(!netOn()||!NET.vault||spinning)return;vtab="mine";drawVault();$("vaultov").classList.add("on")}
 function drawVault(){
   const v=NET.vault;if(!v)return;$("vgw").innerHTML=gwIcon(16)+" "+gwVal();
-  $("vtabs").innerHTML=`<button data-vt="mine" class="${vtab==="mine"?"on":""}">${tr("vault_mine")}</button><button data-vt="buy" class="${vtab==="buy"?"on":""}">${tr("vault_buy")}</button><button data-vt="show" class="${vtab==="show"?"on":""}">${tr("vault_show")}</button>`;
+  $("vtabs").innerHTML=`<button data-vt="mine" class="${vtab==="mine"?"on":""}">${tr("vault_mine")}</button><button data-vt="buy" class="${vtab==="buy"?"on":""}">${tr("vault_buy")}</button>`;
   if(vtab==="mine"){
     vsel=vsel.filter(u=>v.cars.some(c=>c.u===u));
     $("vgrid").innerHTML=v.cars.map(c=>`<div class="car ${vsel.includes(c.u)?"sel":""}" data-vu="${c.u}">${cardHtml(vCar(c))}</div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
@@ -814,16 +816,23 @@ $("vgrid").onclick=e=>{
     sh=sh.includes(u)?sh.filter(x=>x!==u):(sh.length<3?sh.concat(u):sh);v.show=sh;drawVault();netSend({t:"show",cars:sh});return}
   const b=e.target.closest("[data-vb]");if(b)netSend({t:"vbuy",id:+b.dataset.vb})};
 $("vdone").onclick=()=>{$("vaultov").classList.remove("on");render()};
-function renderHeadShow(){const v=NET.vault,ids=((v&&v.show)||[]).map(u=>{const c=v.cars.find(x=>x.u===u);return c&&c.id});$("hshow").innerHTML=showStrip(ids)||`<span class="hsph">⭐</span>`}
-$("hshow").onclick=()=>{if(netOn()&&NET.vault){vtab="show";drawVault();$("vaultov").classList.add("on")}else{curTab="p";showTab()}};
-$("pshowedit").onclick=()=>{if(!netOn()||!NET.vault)return;vtab="show";drawVault();$("vaultov").classList.add("on")};
+/* --- витрина: берётся из обычной коллекции, работает без сервера; другим игрокам видна, когда есть связь с сервером --- */
+const showUs=()=>Array.isArray(S.prof.show)?S.prof.show:[];
+const showCarIds=()=>showUs().map(u=>S.inv.find(o=>o.u===u)).filter(Boolean).map(o=>o.id).filter(id=>BY(id)).slice(0,3);
+let showSent="",showSel=[];
+function syncShow(){if(!netOn())return;const ids=showCarIds(),k=ids.join(",");if(k===showSent)return;showSent=k;netSend({t:"showc",cars:ids})}
+function renderHeadShow(){$("hshow").innerHTML=showStrip(showCarIds())||`<span class="hsph">⭐</span>`;syncShow()}
+function drawShow(){const L=inv();$("showpick").innerHTML=L.map(c=>`<div class="car ${showSel.includes(c.u)?"sel":""}" data-su="${c.u}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">—</div>`;$("showdone").textContent=tr("show_save",showSel.length)}
+function openShowPick(){showSel=showUs().filter(u=>S.inv.some(o=>o.u===u)).slice(0,3);drawShow();$("showov").classList.add("on")}
+$("hshow").onclick=openShowPick;$("pshowedit").onclick=openShowPick;
+$("showpick").onclick=e=>{const el=e.target.closest("[data-su]");if(!el)return;const u=+el.dataset.su;showSel=showSel.includes(u)?showSel.filter(x=>x!==u):(showSel.length<3?showSel.concat(u):showSel);drawShow()};
+$("showdone").onclick=()=>{S.prof.show=showSel.slice();save();$("showov").classList.remove("on");render()};
 function renderProfileCard(){
   const un=NET.me&&NET.me.username||(tgUser&&tgUser.username)||"";
   $("pid").textContent=NET.me?NET.me.pid:S.pid;
   {const L=lvl(),xp=S.xp||0,a=40*(L-1)*(L-1),b=40*L*L;$("plvtxt").textContent=tr("lv")+" "+L;$("plvfill").style.width=Math.max(0,Math.min(100,(xp-a)/(b-a)*100))+"%"}
   $("pnm").innerHTML=esc(me().name)+vbadge(myPid(),NET.me&&NET.me.ver);
-  $("pshowedit").style.display=netOn()?"":"none";
-  {const v=NET.vault,ids=((v&&v.show)||[]).map(u=>{const c=v.cars.find(x=>x.u===u);return c&&c.id});$("pshow").innerHTML=showStrip(ids,true)||`<div class="note" style="margin:6px 0 0;text-align:left">${netOn()?tr("show_empty"):tr("net_off")}</div>`}
+  $("pshow").innerHTML=(showStrip(showCarIds(),true)||`<div class="note" style="margin:6px 0 0;text-align:left">${tr("show_empty")}</div>`)+(netOn()?"":`<div class="note" style="margin:6px 0 0;text-align:left">${tr("show_net_note")}</div>`)
   $("puser").textContent=un?"@"+un:(tgUser?tr("no_username"):"—");
   const locked=!!tgUser||!!S.prof.locked;
   $("nick").disabled=locked;$("nicksave").style.display=locked?"none":"block";
@@ -835,7 +844,12 @@ setInterval(()=>{if(DL.state==="search"){const e=document.querySelector("[data-d
 
 /* ===== отрисовка ===== */
 function setBadge(){$("bdg").style.display=S.dep.some(readyD)&&curTab!=="m"?"flex":"none"}
+let renderPending=false,spinSince=0;
+/* пока крутится любое колесо, экран не перерисовываем: иначе колесо подменяется на новое, а ставка и приз «прыгают» раньше времени */
 function render(){
+  if(spinning){if(!spinSince)spinSince=Date.now();if(Date.now()-spinSince<9000){renderPending=true;return}}
+  spinSince=0;renderPending=false;renderNow()}
+function renderNow(){
   const L=inv();sel=sel.filter(i=>i<L.length);const cars=selCars(L);
   $("bal").textContent=money(S.bal);renderHeadShow();$("bal2").textContent=money(S.bal);$("gwchip").innerHTML=gwIcon(16)+" "+gwVal();
   $("res").innerHTML=RES?RES():"";
@@ -1045,6 +1059,7 @@ $("spin").onclick=()=>{
 };
 // таймеры чёрного рынка: обновляем цифры, а полный экран перерисовываем, только когда что-то стало готово
 setInterval(()=>{
+  if(renderPending&&!spinning)render();
   document.querySelectorAll("[data-tm]").forEach(e=>{const d=S.dep[+e.dataset.tm];if(d)e.textContent=fmtT(Math.max(0,DEP_MS-(Date.now()-d.t0)))});
   const r=S.dep.filter(readyD).length;
   if(r!==lastReady&&!spinning&&!boxBusy&&!$("got").classList.contains("on")&&!$("pick").classList.contains("on"))render();else setBadge()},1000);
