@@ -115,10 +115,12 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #rres{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:min(320px,90%);z-index:5;display:none}
 #vaultov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#vaultov.on{display:flex}
 #nick:disabled{opacity:.75}
+#hshow .mini{margin:0;flex-wrap:nowrap;gap:3px}#hshow .mini .pic{height:24px}.hsph{font-size:16px;opacity:.55}
+#plvl{flex:none;width:68px;text-align:center}#plvl b{display:block;font-size:13px;margin-top:2px}.lvbar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:4px}.lvbar i{display:block;height:100%;background:var(--gold,#f5b820);border-radius:3px}
 </style>
 </head>
 <body>
-<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="gwchip" class="gold" style="font-size:14px"></b><b id="bal"></b><button class="gear" id="gear" aria-label="Settings">⚙️</button></span></h1>
+<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="gwchip" class="gold" style="font-size:14px"></b><span id="hshow" role="button" style="display:flex;align-items:center;cursor:pointer;min-height:24px"></span><b id="bal"></b><button class="gear" id="gear" aria-label="Settings">⚙️</button></span></h1>
 
 
 <div class="sec on" id="sec-w">
@@ -190,8 +192,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 <div class="sec" id="sec-p">
   <button id="sharebtn" data-i="share_btn" style="margin-bottom:10px"></button>
   <div class="card" id="tgcard" style="display:none"><h2 style="margin-top:0" data-i="tg_title"></h2><div id="tgon"><div class="dealer"><span id="tgav" class="avt" style="width:56px;height:56px;border:3px solid var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;color:#fff;background-color:var(--accent)"></span><div style="flex:1"><b id="tgname"></b><div class="note" style="text-align:left;margin:2px 0 0" id="tgun"></div></div></div><button class="ghost" id="tguse" data-i="tg_use"></button></div><div id="tgoff" style="display:none"><div class="note" style="text-align:left;margin:0 0 10px" data-i="tg_hint"></div><button class="buy" id="tgopen" data-i="tg_open"></button></div></div>
-  <div class="card"><div class="dealer"><span id="pavimg" class="avt" style="width:76px;height:76px;border:3px solid var(--accent)"></span><div style="flex:1"><h2 style="margin:0 0 6px" data-i="prof_nick"></h2><div id="pnm" style="font-weight:800;font-size:19px;margin:0 0 8px"></div><input id="nick" maxlength="16" autocomplete="off"><button class="ghost" id="nicksave" data-i="nick_save" style="margin-top:6px;display:none"></button><div class="note" id="nickhint" style="text-align:left;margin:6px 0 0"></div></div></div>
-  <div class="row" style="margin-top:12px"><span data-i="pid_label"></span><span style="display:flex;align-items:center;gap:8px"><b id="pid"></b><button class="ghost" id="pidcopy" data-i="copy" style="width:auto;padding:5px 10px;margin:0;font-size:12px"></button></span></div><div class="row"><span>Telegram</span><b id="puser"></b></div><div id="pshowwrap" style="margin-top:14px;display:none"><div class="row" style="margin:0"><h2 style="margin:0" data-i="vault_show"></h2><button class="ghost" id="pshowedit" data-i="show_edit" style="width:auto;padding:5px 12px;margin:0;font-size:12px"></button></div><div id="pshow"></div></div><h2 data-i="prof_avatar" style="margin-top:14px"></h2><div class="avs" id="avs"></div></div>
+  <div class="card"><div class="dealer"><span id="pavimg" class="avt" style="width:76px;height:76px;border:3px solid var(--accent)"></span><div style="flex:1"><h2 style="margin:0 0 6px" data-i="prof_nick"></h2><div id="pnm" style="font-weight:800;font-size:19px;margin:0 0 8px"></div><input id="nick" maxlength="16" autocomplete="off"><button class="ghost" id="nicksave" data-i="nick_save" style="margin-top:6px;display:none"></button><div class="note" id="nickhint" style="text-align:left;margin:6px 0 0"></div></div><div id="plvl"><svg viewBox="0 0 48 48" width="44" height="44"><path d="M14 2h8l4 14h-8z" fill="#c0392b"/><path d="M34 2h-8l-4 14h8z" fill="#2980b9"/><circle cx="24" cy="30" r="14" fill="#f5b820" stroke="#c98a00" stroke-width="3"/><circle cx="24" cy="30" r="9" fill="none" stroke="#fff3b0" stroke-width="1.5"/><path d="M24 23l2 5h5l-4 3 1.5 5-4.5-3-4.5 3 1.5-5-4-3h5z" fill="#fff3b0"/></svg><b id="plvtxt"></b><div class="lvbar"><i id="plvfill"></i></div></div></div>
+  <div class="row" style="margin-top:12px"><span data-i="pid_label"></span><span style="display:flex;align-items:center;gap:8px"><b id="pid"></b><button class="ghost" id="pidcopy" data-i="copy" style="width:auto;padding:5px 10px;margin:0;font-size:12px"></button></span></div><div class="row"><span>Telegram</span><b id="puser"></b></div><div id="pshowwrap" style="margin-top:14px"><div class="row" style="margin:0"><h2 style="margin:0" data-i="vault_show"></h2><button class="ghost" id="pshowedit" data-i="show_edit" style="width:auto;padding:5px 12px;margin:0;font-size:12px"></button></div><div id="pshow"></div></div><h2 data-i="prof_avatar" style="margin-top:14px"></h2><div class="avs" id="avs"></div></div>
   <div id="prof"></div></div>
 
 <div class="sec" id="sec-x">
@@ -812,13 +814,16 @@ $("vgrid").onclick=e=>{
     sh=sh.includes(u)?sh.filter(x=>x!==u):(sh.length<3?sh.concat(u):sh);v.show=sh;drawVault();netSend({t:"show",cars:sh});return}
   const b=e.target.closest("[data-vb]");if(b)netSend({t:"vbuy",id:+b.dataset.vb})};
 $("vdone").onclick=()=>{$("vaultov").classList.remove("on");render()};
+function renderHeadShow(){const v=NET.vault,ids=((v&&v.show)||[]).map(u=>{const c=v.cars.find(x=>x.u===u);return c&&c.id});$("hshow").innerHTML=showStrip(ids)||`<span class="hsph">⭐</span>`}
+$("hshow").onclick=()=>{if(netOn()&&NET.vault){vtab="show";drawVault();$("vaultov").classList.add("on")}else{curTab="p";showTab()}};
 $("pshowedit").onclick=()=>{if(!netOn()||!NET.vault)return;vtab="show";drawVault();$("vaultov").classList.add("on")};
 function renderProfileCard(){
   const un=NET.me&&NET.me.username||(tgUser&&tgUser.username)||"";
   $("pid").textContent=NET.me?NET.me.pid:S.pid;
+  {const L=lvl(),xp=S.xp||0,a=40*(L-1)*(L-1),b=40*L*L;$("plvtxt").textContent=tr("lv")+" "+L;$("plvfill").style.width=Math.max(0,Math.min(100,(xp-a)/(b-a)*100))+"%"}
   $("pnm").innerHTML=esc(me().name)+vbadge(myPid(),NET.me&&NET.me.ver);
-  $("pshowwrap").style.display=netOn()?"":"none";
-  {const v=NET.vault,ids=((v&&v.show)||[]).map(u=>{const c=v.cars.find(x=>x.u===u);return c&&c.id});$("pshow").innerHTML=showStrip(ids,true)||`<div class="note" style="margin:6px 0 0;text-align:left">${tr("show_empty")}</div>`}
+  $("pshowedit").style.display=netOn()?"":"none";
+  {const v=NET.vault,ids=((v&&v.show)||[]).map(u=>{const c=v.cars.find(x=>x.u===u);return c&&c.id});$("pshow").innerHTML=showStrip(ids,true)||`<div class="note" style="margin:6px 0 0;text-align:left">${netOn()?tr("show_empty"):tr("net_off")}</div>`}
   $("puser").textContent=un?"@"+un:(tgUser?tr("no_username"):"—");
   const locked=!!tgUser||!!S.prof.locked;
   $("nick").disabled=locked;$("nicksave").style.display=locked?"none":"block";
@@ -832,7 +837,7 @@ setInterval(()=>{if(DL.state==="search"){const e=document.querySelector("[data-d
 function setBadge(){$("bdg").style.display=S.dep.some(readyD)&&curTab!=="m"?"flex":"none"}
 function render(){
   const L=inv();sel=sel.filter(i=>i<L.length);const cars=selCars(L);
-  $("bal").textContent=tr("lv")+lvl()+" · "+money(S.bal);$("bal2").textContent=money(S.bal);$("gwchip").innerHTML=gwIcon(16)+" "+gwVal();
+  $("bal").textContent=money(S.bal);renderHeadShow();$("bal2").textContent=money(S.bal);$("gwchip").innerHTML=gwIcon(16)+" "+gwVal();
   $("res").innerHTML=RES?RES():"";
   $("bsw").innerHTML=`<button data-sub="d" class="${bsub==="d"?"on":""}">⚔️ ${tr("tab_d")}</button><button data-sub="j" class="${bsub==="j"?"on":""}">🎰 ${tr("tab_j")}</button><button data-sub="r" class="${bsub==="r"?"on":""}">🏁 ${tr("tab_r")}</button>`;
   $("count").textContent=`— ${L.length} ${tr("pcs")} · ${money(sumP(L))}`;
