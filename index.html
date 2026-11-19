@@ -17,6 +17,50 @@ h1 b{color:var(--green)}
 h2{font-size:13px;color:var(--muted);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.04em}
 .tabs{display:flex;gap:5px;margin-bottom:12px}
 .tabs button{min-width:0;background:var(--card);color:var(--text);border:1px solid var(--line);padding:7px 2px;font-size:16px;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.1;border-radius:10px}
+
+/* вспышка при победе (цвет темы из настроек) и красное мигание с тряской при проигрыше: 1.5 с */
+#fx{position:fixed;inset:0;z-index:150;pointer-events:none;opacity:0}
+#fx.fxw{background:radial-gradient(circle at 50% 45%,var(--accent2),var(--accent) 55%,transparent 92%);animation:kFxW 1.5s ease-out both}
+#fx.fxl{background:#ef1c2c;animation:kFxL 1.5s linear both}
+@keyframes kFxW{0%{opacity:0}15%{opacity:.8}45%{opacity:.45}100%{opacity:0}}
+@keyframes kFxL{0%{opacity:0}10%{opacity:.6}24%{opacity:.06}40%{opacity:.5}58%{opacity:0}100%{opacity:0}}
+.shk .sec.on,.shk h1{animation:kShake 1.5s ease-out}
+@keyframes kShake{0%,100%{transform:translateX(0)}8%{transform:translateX(-7px)}16%{transform:translateX(7px)}24%{transform:translateX(-6px)}32%{transform:translateX(5px)}42%{transform:translateX(-4px)}52%{transform:translateX(3px)}64%{transform:translateX(-2px)}78%{transform:translateX(1px)}}
+/* полученная машинка: окно уменьшается, машинка летит в кнопку «Прокачка» */
+#got.fly{background:rgba(0,0,0,0);transition:background 1.4s ease}
+#got.fly .gbox{opacity:0;transform:scale(.45);transition:opacity .4s ease,transform .5s ease}
+.gbox.flyw{position:fixed;margin:0;padding:0;max-width:none;max-height:none;overflow:visible;background:transparent;border-radius:0;z-index:210;pointer-events:none}
+@media (prefers-reduced-motion:reduce){#fx{display:none}.shk .sec.on,.shk h1{animation:none}}
+/* значки кнопок: у каждого своя анимация на 1.5 секунды после нажатия */
+.ic *{transform-box:fill-box;transform-origin:center}
+.gear{display:flex;align-items:center;justify-content:center}
+#bsw button{display:flex;align-items:center;justify-content:center;gap:6px}
+.go .u1,.go .u2,.go .u3{animation:kHop 1.2s ease-out both}.go .u2{animation-delay:.15s}.go .u1{animation-delay:.3s}
+@keyframes kHop{0%,100%{transform:translateY(0);stroke:var(--c)}20%{transform:translateY(-6px);stroke:#fff6a8}40%{transform:translateY(0);stroke:#fff6a8}65%{stroke:var(--c)}}
+.isw .swA,.isw .swB{transform-box:view-box}.isw .swA{transform-origin:20.6px 20.6px}.isw .swB{transform-origin:3.4px 20.6px}.isw .spark{opacity:0}
+.go .swA{animation:kSwA 1.5s ease-in-out both}.go .swB{animation:kSwB 1.5s ease-in-out both}.go .spark{animation:kSpark 1.5s ease-out both}
+@keyframes kSwA{0%{transform:rotate(0)}22%{transform:rotate(-24deg)}44%{transform:rotate(6deg)}54%{transform:rotate(1deg)}68%{transform:rotate(5deg)}100%{transform:rotate(0)}}
+@keyframes kSwB{0%{transform:rotate(0)}22%{transform:rotate(24deg)}44%{transform:rotate(-6deg)}54%{transform:rotate(-1deg)}68%{transform:rotate(-5deg)}100%{transform:rotate(0)}}
+@keyframes kSpark{0%,40%{opacity:0;transform:scale(.3)}48%{opacity:1;transform:scale(1.6)}70%{opacity:.9;transform:scale(1.1)}100%{opacity:0;transform:scale(.6)}}
+.go .bag{transform-origin:50% 100%;animation:kBag 1.5s ease-out both}
+@keyframes kBag{0%,100%{transform:translateY(0) rotate(0)}15%{transform:translateY(-6px) rotate(-8deg)}30%{transform:translateY(0) rotate(7deg)}45%{transform:translateY(-3px) rotate(-5deg)}60%{transform:translateY(0) rotate(2deg)}80%{transform:rotate(0)}}
+.go .t1,.go .t2,.go .t3{animation:kRing 1.3s ease-in-out both}.go .t2{animation-delay:.1s}.go .t3{animation-delay:.2s;animation-name:kHit}
+@keyframes kRing{0%,100%{transform:scale(1)}25%{transform:scale(1.2)}50%{transform:scale(.9)}75%{transform:scale(1.08)}}
+@keyframes kHit{0%,100%{transform:scale(1);fill:#ef4444}30%{transform:scale(1.5);fill:#fde047}55%{transform:scale(.85);fill:#fde047}80%{transform:scale(1.1);fill:#ef4444}}
+.go .gl{animation:kDrop 1.5s ease-out both}.glint{opacity:0}.go .glint{animation:kGlint 1.5s ease-in-out both}
+@keyframes kDrop{0%{transform:translateY(-8px)}25%{transform:translateY(2px)}40%{transform:translateY(-1px)}55%,100%{transform:translateY(0)}}
+@keyframes kGlint{0%,50%{opacity:0;transform:translateX(0)}58%{opacity:.9}90%{opacity:.9;transform:translateX(17px)}100%{opacity:0;transform:translateX(18px)}}
+.go .door{transform-origin:50% 0;animation:kDoor 1.5s ease-in-out both}
+@keyframes kDoor{0%,100%{transform:scaleY(1)}28%,70%{transform:scaleY(.12)}}
+.go .per{transform-origin:50% 100%;animation:kWave 1.5s ease-in-out both}.go .hd{animation:kNod 1.5s ease-in-out both}
+@keyframes kWave{0%,100%{transform:rotate(0)}20%{transform:rotate(-12deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(4deg)}}
+@keyframes kNod{0%,100%{transform:translateY(0) scale(1)}25%{transform:translateY(-2px) scale(1.12)}55%{transform:translateY(0) scale(1)}}
+.go .gearp{animation:kSpin 1.5s ease-in-out both}.go .whl{animation:kSpin 1.5s cubic-bezier(.2,.7,.2,1) both}
+@keyframes kSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.go .cloth{transform-origin:0 50%;animation:kFlag 1.5s ease-in-out both}
+@keyframes kFlag{0%,100%{transform:skewY(0) scaleX(1)}20%{transform:skewY(-9deg) scaleX(.9)}45%{transform:skewY(8deg) scaleX(1.06)}70%{transform:skewY(-5deg) scaleX(.96)}}
+@media (prefers-reduced-motion:reduce){.go *{animation:none!important}}
+.tabs button i{display:flex;height:22px;align-items:center;justify-content:center}#bsw button svg{display:inline-block;vertical-align:-3px}
 .tabs button small{font-size:10px;font-weight:600}
 .tabs button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -114,6 +158,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #rwheel{width:150px;height:150px;color:var(--text);touch-action:none}
 #rres{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:min(320px,90%);z-index:5;display:none}
 #showov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#showov.on{display:flex}#showov .gbox .ci{height:72px}#showov .gbox .car{font-size:11px}#showov .gbox svg{width:60px}
+#pov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#pov.on{display:flex}#pshow .mini.big,#pov .mini.big{gap:10px;margin-top:10px}#pshow .mini.big .pic,#pov .mini.big .pic{height:64px}
 #vaultov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#vaultov.on{display:flex}
 #nick:disabled{opacity:.75}
 #hshow .mini{margin:0;flex-wrap:nowrap;gap:3px}#hshow .mini .pic{height:24px}.hsph{font-size:16px;opacity:.55}
@@ -121,7 +166,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 </style>
 </head>
 <body>
-<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="gwchip" class="gold" style="font-size:14px"></b><span id="hshow" role="button" style="display:flex;align-items:center;cursor:pointer;min-height:24px"></span><b id="bal"></b><button class="gear" id="gear" aria-label="Settings">⚙️</button></span></h1>
+<h1><span>🏁 Hot Wheels</span><span style="display:flex;align-items:center;gap:10px"><b id="gwchip" class="gold" style="font-size:14px"></b><b id="bal"></b><button class="gear" id="gear" aria-label="Settings"><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path class="gearp" d="M10.21 4.82 L10.52 1.50 L13.48 1.50 L13.79 4.82 L15.81 5.66 L18.38 3.53 L20.47 5.62 L18.34 8.19 L19.18 10.21 L22.50 10.52 L22.50 13.48 L19.18 13.79 L18.34 15.81 L20.47 18.38 L18.38 20.47 L15.81 18.34 L13.79 19.18 L13.48 22.50 L10.52 22.50 L10.21 19.18 L8.19 18.34 L5.62 20.47 L3.53 18.38 L5.66 15.81 L4.82 13.79 L1.50 13.48 L1.50 10.52 L4.82 10.21 L5.66 8.19 L3.53 5.62 L5.62 3.53 L8.19 5.66Z M12 8.6a3.4 3.4 0 1 0 .01 0Z" fill="#9ca3af" fill-rule="evenodd" stroke="none"/></svg></button></span></h1>
 
 
 <div class="sec on" id="sec-w">
@@ -205,13 +250,14 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <button class="ghost" id="reset" data-i="reset"></button>
 </div>
 
-<div class="tabs" id="tabs"><button data-t="w" class="on"><i>⬆️</i><small data-i="tab_w"></small></button><button data-t="b"><i>⚔️</i><small data-i="tab_b"></small></button><button data-t="s"><i>🛒</i><small data-i="tab_s"></small></button><button data-t="q"><i>🎯</i><small data-i="tab_q"></small></button><button data-t="m"><i>🕶</i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="g"><i>🔧</i><small data-i="tab_g"></small></button><button data-t="p"><i>👤</i><small data-i="tab_p"></small></button></div>
+<div class="tabs" id="tabs"><button data-t="w" class="on"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path class="u1" style="--c:#ef4444" d="M4 8l8-5 8 5" stroke="#ef4444" stroke-width="3"/><path class="u2" style="--c:#f97316" d="M4 15l8-5 8 5" stroke="#f97316" stroke-width="3"/><path class="u3" style="--c:#facc15" d="M4 22l8-5 8 5" stroke="#facc15" stroke-width="3"/></svg></i><small data-i="tab_w"></small></button><button data-t="b"><i><svg class="ic isw" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="swA"><path d="M4.5 4.5L15 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M13 17.2l4.2-4.2" stroke="#f59e0b" stroke-width="2.4"/><path d="M16 16l3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="20.6" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><g class="swB"><path d="M19.5 4.5L9 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M11 17.2L6.8 13" stroke="#f59e0b" stroke-width="2.4"/><path d="M8 16l-3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="3.4" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><path class="spark" d="M12 6.8l1.1 3 3 1.1-3 1.1-1.1 3-1.1-3-3-1.1 3-1.1z" fill="#fde047" stroke="none"/></svg></i><small data-i="tab_b"></small></button><button data-t="s"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="bag"><path d="M5 8h14l-1 12H6z" fill="#22c55e" stroke="#15803d" stroke-width="1.5"/><path class="hdl" d="M9 8V6a3 3 0 016 0v2" stroke="#15803d" stroke-width="2"/></g></svg></i><small data-i="tab_s"></small></button><button data-t="q"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><circle class="t1" cx="12" cy="12" r="9.5" fill="#ef4444"/><circle class="t2" cx="12" cy="12" r="6.2" fill="#fff"/><circle class="t3" cx="12" cy="12" r="3.2" fill="#ef4444"/></svg></i><small data-i="tab_q"></small></button><button data-t="m"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="gl"><rect x="2" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><rect x="13.5" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><path d="M10.5 11h3M2 9h20" stroke="#7c3aed" stroke-width="2"/><path class="glint" d="M5 10.2l-1.6 4.6" stroke="#fff" stroke-width="1.6"/></g></svg></i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="g"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path d="M3 11l9-7 9 7v10H3z" fill="#3b82f6" stroke="#3b82f6" stroke-width="1"/><rect x="7" y="12" width="10" height="9" fill="#1e3a8a" stroke="none"/><circle cx="9.6" cy="19" r="1" fill="#fde047" stroke="none"/><circle cx="14.4" cy="19" r="1" fill="#fde047" stroke="none"/><g class="door"><rect x="7" y="12" width="10" height="9" fill="#dbeafe" stroke="none"/><path d="M7 15h10M7 18h10" stroke="#3b82f6" stroke-width="1.4"/></g></svg></i><small data-i="tab_g"></small></button><button data-t="p"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="per"><circle class="hd" cx="12" cy="8" r="4.5" fill="#ec4899" stroke="none"/><path d="M3.5 21c0-5 4-7.5 8.5-7.5s8.5 2.5 8.5 7.5z" fill="#ec4899" stroke="none"/></g></svg></i><small data-i="tab_p"></small></button></div>
 <div id="shareov"><div class="gbox"><div class="gt" data-i="share_title"></div><div class="linkbox" id="slink"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="buy" id="scopy" data-i="copy"></button><button id="sshare" data-i="share"></button></div><div class="note" id="smsg" style="min-height:16px"></div><button class="ghost" id="sclose" data-i="close"></button></div></div>
 <div id="selov"><div class="gbox"><div class="gt" data-i="sel_title"></div><div class="grid" id="selgrid" style="max-height:50vh;overflow:auto"></div><button id="seldone" style="margin-top:12px"></button></div></div>
 <div id="raceov"><div class="rhud"><b id="rpos">1/5</b><b id="rtime">0:00</b><button class="ghost" id="rquit">✕</button></div><canvas id="rcv" width="360" height="440"></canvas>
 <div id="rctl"><svg id="rwheel" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="9" fill="currentColor"/><path d="M50 50 L12 50 M50 50 L88 50 M50 50 L50 86" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><rect x="45" y="4" width="10" height="9" rx="2" fill="#e5384a"/></svg><div class="note" data-i="race_hint" style="margin:0"></div></div>
 <div id="rres"></div></div>
 <div id="showov"><div class="gbox"><div class="gt" data-i="vault_show"></div><div class="note" data-i="show_pick_note" style="margin:0 0 10px;text-align:left"></div><div class="grid" id="showpick" style="max-height:50vh;overflow:auto"></div><button id="showdone" style="margin-top:12px"></button></div></div>
+<div id="pov"><div class="gbox"><div id="pbody" style="text-align:center"></div><button class="ghost" id="pclose" data-i="close" style="margin-top:12px"></button></div></div>
 <div id="vaultov"><div class="gbox"><div class="gt"><span data-i="vault_title"></span> <span style="font-size:14px" id="vgw"></span></div><div class="note" data-i="vault_note" style="margin:0 0 10px;text-align:left"></div><div class="sw" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px" id="vtabs"></div><div class="grid" id="vgrid" style="max-height:42vh;overflow:auto"></div><button id="vdone" style="margin-top:12px"></button></div></div>
 <div id="got"><div class="gbox"><div class="gt" id="gt"></div><div class="gcars" id="gcar"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="sell" id="gsell" style="margin-top:0"></button><button id="gok" data-i="keep"></button></div></div></div>
 <div id="caseov"><div class="cbox"><div class="gt" data-i="case_t"></div><div class="cwin" id="cwin"><div class="cmark"></div><div id="cstrip"></div></div></div></div>
@@ -349,6 +395,8 @@ const GOLD_SIZE=.2;
 let S,sel=[],spinning=false,boxBusy=false,rot=0,drot=0,goldOn=false,curTab="w",lastReady=0,bsub="d",RES=null;
 let DU={bot:0,mine:null,opp:null,msg:"",searching:false};
 const en=()=>S.set.lang==="en",ix=()=>en()?1:0;
+const IC={sw:`<svg class="ic isw" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="swA"><path d="M4.5 4.5L15 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M13 17.2l4.2-4.2" stroke="#f59e0b" stroke-width="2.4"/><path d="M16 16l3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="20.6" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><g class="swB"><path d="M19.5 4.5L9 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M11 17.2L6.8 13" stroke="#f59e0b" stroke-width="2.4"/><path d="M8 16l-3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="3.4" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><path class="spark" d="M12 6.8l1.1 3 3 1.1-3 1.1-1.1 3-1.1-3-3-1.1 3-1.1z" fill="#fde047" stroke="none"/></svg>`,wheel:`<svg class="ic " viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="whl"><circle cx="12" cy="12" r="9.5" fill="#ef4444" stroke="none"/><path d="M12 12V2.5A9.5 9.5 0 0 1 21.5 12z" fill="#22c55e" stroke="none"/><path d="M12 12v9.5A9.5 9.5 0 0 1 2.5 12z" fill="#facc15" stroke="none"/><circle cx="12" cy="12" r="2.6" fill="#fff" stroke="none"/></g></svg>`,flag:`<svg class="ic " viewBox="0 0 24 24" width="18" height="18" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path d="M5 3v18" stroke="#9ca3af" stroke-width="2"/><g class="cloth"><path d="M5 4h14v10H5z" fill="#fff" stroke="#9ca3af" stroke-width="1"/><g fill="#111" stroke="none"><rect x="5" y="4" width="3.5" height="3.34"/><rect x="12" y="4" width="3.5" height="3.34"/><rect x="8.5" y="7.34" width="3.5" height="3.33"/><rect x="15.5" y="7.34" width="3.5" height="3.33"/><rect x="5" y="10.67" width="3.5" height="3.33"/><rect x="12" y="10.67" width="3.5" height="3.33"/></g></g></svg>`};
+let LASTPLS=[],LASTOPP=null;
 const VERIFIED_IDS=["60097984"];
 const myPid=()=>String((typeof NET!=="undefined"&&NET.me&&NET.me.pid)||(typeof S!=="undefined"&&S&&S.pid)||"");
 const vbadge=(pid,ver)=>(ver||VERIFIED_IDS.includes(String(pid||"")))?` <span title="Verified" style="display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.05em;border-radius:50%;background:#2aabee;color:#fff;font-size:.7em;font-weight:800;vertical-align:middle">✓</span>`:"";
@@ -383,7 +431,7 @@ function applyTheme(){
   if(S.set.mode==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",S.set.mode);r.lang=S.set.lang;
 }
 function applyLang(){document.querySelectorAll("[data-i]").forEach(e=>e.innerHTML=tr(e.dataset.i));$("nick").placeholder=tgName.slice(0,16)||tr("nick_ph")}
-function svg(col,w=54,h=26){return `<svg viewBox="0 0 64 30" width="${w}" height="${h}"><path d="M4 22v-5l8-2 8-8h20l9 8 11 2v5z" fill="${col}"/><circle cx="18" cy="23" r="5" fill="#222"/><circle cx="48" cy="23" r="5" fill="#222"/><circle cx="18" cy="23" r="2" fill="#ccc"/><circle cx="48" cy="23" r="2" fill="#ccc"/></svg>`}
+function svg(col,w=54,h=26){return `<svg viewBox="0 0 64 30" width="${w}" height="${h}" stroke-linejoin="round" stroke-linecap="round"><path d="M5 23.4C3 23.4 1.6 22 1.9 20.2C2.2 18.4 3.8 17.4 7.6 16.8C12.6 16 15.4 14.6 19.2 11.7C23.2 8.8 28.4 7.4 34.4 7.4C40.8 7.4 45.8 9.6 49.6 13.2C51.2 14.7 53.2 15.6 57 16.3C61 17 62.6 18.5 62.2 21C62 22.5 61.2 23.4 59.6 23.4Z" fill="${col}" stroke="${col}" stroke-width="1.6"/><path d="M21.4 14.6C24.8 11 29.4 9.4 34.2 9.4C39.2 9.4 43.2 11.2 46.8 14.6C40.4 15.4 28 15.4 21.4 14.6Z" fill="#dbeafe" fill-opacity=".9" stroke="#dbeafe" stroke-opacity=".9" stroke-width="1.2"/><path d="M8.4 19C19.6 16 32.4 15.6 46.4 16.8" stroke="#fff" stroke-opacity=".4" stroke-width="1.4" fill="none"/><path d="M9.4 23.6A7.6 7.6 0 0 1 24.6 23.6Z" fill="#111" stroke="#111" stroke-width=".8"/><path d="M40.4 23.6A7.6 7.6 0 0 1 55.6 23.6Z" fill="#111" stroke="#111" stroke-width=".8"/><ellipse cx="60.2" cy="19" rx="1.7" ry="1.1" fill="#fde047" stroke="none"/><ellipse cx="3.9" cy="19.4" rx="1.3" ry="1" fill="#ef4444" stroke="none"/><circle cx="17" cy="23.2" r="5.6" fill="#1b1b1f" stroke="none"/><circle cx="48" cy="23.2" r="5.6" fill="#1b1b1f" stroke="none"/><circle cx="17" cy="23.2" r="2.6" fill="#d1d5db" stroke="none"/><circle cx="48" cy="23.2" r="2.6" fill="#d1d5db" stroke="none"/><circle cx="17" cy="23.2" r=".9" fill="#6b7280" stroke="none"/><circle cx="48" cy="23.2" r=".9" fill="#6b7280" stroke="none"/></svg>`}
 function cardHtml(c){return `${c.img?imgTag(c.img,"ci"):svg(R[c.r].col)}<b>${cn(c)}</b><span class="p">${money(c.price)}</span><br><span class="tag" style="background:${R[c.r].col}">${rn(c.r)}</span>${c.tn?` <span class="tag" style="background:#555">⚙${c.tn}</span>`:""}`}
 const cashCard=t=>`<div style="font-size:40px;line-height:72px">💰</div><b>${tr("cash")}</b><span class="p">${money(t.price)}</span>`;
 function stackHtml(cars){
@@ -438,7 +486,27 @@ function showGot(cars,title){gotCars=cars;$("gt").innerHTML=title;const g=$("gca
   g.innerHTML=cars.map(c=>`<div class="car">${cardHtml(c)}</div>`).join("");
   $("gsell").style.display="";$("gok").textContent=tr("keep");$("gsell").textContent=tr("got_sell",money(cars.reduce((s,c)=>s+sellPrice(c),0)));$("got").classList.add("on");boom()}
 function showCash(n,title){gotCars=[];$("gt").innerHTML=title;const g=$("gcar");g.className="gcars";g.innerHTML=`<div style="font-size:72px;line-height:1.1">💰</div><b style="font-size:24px;min-height:0">+${money(n)}</b>`;$("gsell").style.display="none";$("gok").textContent=tr("ok");$("got").classList.add("on");boom()}
-$("gok").onclick=closeGot;
+function flash(win){
+  let f=$("fx");if(!f){f=document.createElement("div");f.id="fx";document.body.appendChild(f)}
+  f.className="";void f.offsetWidth;f.className=win?"fxw":"fxl";clearTimeout(f._t);f._t=setTimeout(()=>{f.className=""},1500);
+  const r=document.documentElement;r.classList.remove("shk");clearTimeout(r._t);
+  if(!win){void r.offsetWidth;r.classList.add("shk");r._t=setTimeout(()=>r.classList.remove("shk"),1500)}}
+let flying=false;
+function gotFly(){
+  if(flying)return true;
+  const tab=document.querySelector('#tabs [data-t="w"] i'),src=$("gcar");
+  if(!gotCars.length||$("gsell").style.display==="none"||!tab||!src.firstChild||matchMedia("(prefers-reduced-motion:reduce)").matches||!Element.prototype.animate)return false;
+  flying=true;
+  const a=src.getBoundingClientRect(),b=tab.getBoundingClientRect();
+  const w=document.createElement("div");w.className="gbox flyw";
+  Object.assign(w.style,{left:a.left+"px",top:a.top+"px",width:a.width+"px",height:a.height+"px"});
+  const cl=src.cloneNode(true);cl.removeAttribute("id");w.appendChild(cl);document.body.appendChild(w);
+  $("got").classList.add("fly");
+  const dx=b.left+b.width/2-(a.left+a.width/2),dy=b.top+b.height/2-(a.top+a.height/2);
+  const an=w.animate([{transform:"translate(0,0) scale(1)",opacity:1,offset:0},{transform:`translate(${dx*.2}px,${dy*.2-70}px) scale(.62)`,opacity:1,offset:.3},{transform:`translate(${dx}px,${dy}px) scale(.05)`,opacity:.9,offset:1}],{duration:1500,easing:"cubic-bezier(.45,.05,.25,1)",fill:"forwards"});
+  an.onfinish=()=>{w.remove();flying=false;$("got").classList.remove("fly");closeGot();ping(document.querySelector('#tabs [data-t="w"]'))};
+  return true}
+$("gok").onclick=()=>{if(!gotFly())closeGot()};
 $("gsell").onclick=()=>{let tot=0,n=0,last=null;
   for(const gc of gotCars){let i=-1;S.inv.forEach((o,k)=>{if(o.id===gc.id)i=k});if(i>=0){const c=inv()[i];tot+=sellPrice(c);S.inv.splice(i,1);S.st.sells++;n++;last=c}}
   if(n){S.bal+=tot;sel=[];genShop();save();{const cnt=n,tt=tot,lid=last.id;RES=()=>`<span class="g">${tr("sold",cnt>1?cnt+" "+tr("pcs"):cn(BY(lid)),money(tt))}</span>`}render()}closeGot()};
@@ -499,7 +567,7 @@ function jpSpin(){
   jrot+=360*5+((360-(jrot%360))%360)+(360-a*360);$("jwheel").style.transform=`rotate(${jrot}deg)`;
   setTimeout(()=>{spinning=false;jrot=0;JP.parts=null;JP.mine=null;
     JP.msg=wMe?()=>`<span class="g">${tr("jp_win",gotN)}</span>`:()=>`<span class="r">${tr("jp_lose",esc(BOTS[wBi].n[ix()]),mineIds.map(i=>cn(BY(i))).join(", "))}</span>`;
-    render();if(wMe)showGot(got.map(c=>Object.assign({},c)),tr("g_jp"))},6700);
+    render();flash(wMe);if(wMe)showGot(got.map(c=>Object.assign({},c)),tr("g_jp"))},6700);
 }
 
 /* ===== задания MOBFARM обновляются каждые 1,5 часа ===== */
@@ -590,12 +658,12 @@ function raceTick(){
 function renderRace(L){
   const p=$("rpanel"),rc=racerCar(L),w=RL.w,x=ix();
   if(RL.view==="rwait"){
-    const m=NET.rl,pls=m?m.players:[],left=m?Math.max(0,Math.ceil((m.left-(Date.now()-NET.rlAt))/1000)):25;
-    const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}${vbadge(pls[i].pid,pls[i].ver)}</small>${showStrip(pls[i].show)}</div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    const m=NET.rl,pls=(LASTPLS=m?m.players:[]),left=m?Math.max(0,Math.ceil((m.left-(Date.now()-NET.rlAt))/1000)):25;
+    const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot" data-pl="${i}" style="cursor:pointer">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}${vbadge(pls[i].pid,pls[i].ver)}</small></div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${gwIcon(16)} ${tr("race_ranked")}</b><span>${pls.length}/5</span></div><div class="rslots">${slots}</div><div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><div class="note">${tr("race_ranked_rule",m?m.needed:3)}</div><button class="ghost" data-rc="rcancel">${tr("cancel")}</button>`;return}
   if(RL.view==="wait"&&w){
     const left=Math.max(0,Math.ceil((RWAIT-(Date.now()-w.t0))/1000));
-    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</small>${showStrip(showCarIds())}</div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
+    const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</small></div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${TRACKS[w.track].n[x]}</b><span>${w.slots.filter(Boolean).length}/5</span></div><div class="rslots">${slots}</div>`+
       (w.filled?`<div class="note" style="font-size:18px;margin:12px 0"><b data-rcd>${tr("race_go",3)}</b></div><div class="note">${tr("race_filled")}</div>`:`<div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><button class="ghost" data-rc="cancel">${tr("cancel")}</button>`);
     return}
@@ -698,7 +766,7 @@ function raceFinish(){
   R_.place=place;const prize=PRIZE[place-1]||0;
   S.bal+=prize;S.xp+=PXP[place-1]||5;if(place===1)S.st.racew++;save();
   $("rres").innerHTML=`<div class="gbox" style="max-height:none"><div class="gt">${place===1?"🏆":"🏁"} ${tr("race_place",place)}</div><div style="font-size:15px;margin:6px 0 12px">${prize?`<b class="g">+${money(prize)}</b>`:tr("race_noprize")}</div><button id="rdone">${tr("race_done")}</button></div>`;
-  $("rres").style.display="block";raceDraw();
+  $("rres").style.display="block";raceDraw();if(place===1)flash(true);
 }
 function raceClose(){if(RC&&RC.opts&&RC.opts.ranked&&!RC.done)netSend({t:"rquit"});if(RC){cancelAnimationFrame(RC.raf);RC=null}$("raceov").classList.remove("on");$("rres").style.display="none";render()}
 function wPoint(e){const r=$("rwheel").getBoundingClientRect();return Math.atan2(e.clientY-(r.top+r.height/2),e.clientX-(r.left+r.width/2))*180/Math.PI}
@@ -752,7 +820,7 @@ function rankedResult(m){
   if(RC&&RC.opts&&RC.opts.ranked&&!RC.done||(RC&&RC.opts&&RC.opts.ranked&&RC.parts[0].fin!==null)){
     RC.done=true;RC.place=m.place;
     const body=m.dq?`<div class="gt">🚫 ${tr("rr_dq")}</div>`:`<div class="gt">${m.place===1?"🏆":"🏁"} ${tr("race_place",m.place)}</div><div style="font-size:15px;margin:6px 0 4px">${m.ranked?(m.gain?`<b class="gold">${gwIcon(18)} ${tr("rr_gain",m.gain)}</b>`:tr("race_noprize"))+`<br>${tr("rr_rating",m.rating)}`:tr("rr_unranked")}</div>`;
-    showRankedBox(body);raceDraw();
+    showRankedBox(body);raceDraw();if(m.dq)flash(false);else if(m.place===1)flash(true);
   }
   render();
 }
@@ -771,14 +839,14 @@ function liveDuelResult(m){
     const name=m.opp.name,lostIds=(m.lost||[]).map(c=>c.id);
     DL.state="idle";
     DL.msg=m.win?()=>`<span class="g">${tr("dl_win",esc(name))}</span><br><span class="${m.gain?"gold":""}">${m.gain?tr("dl_win_gw"):tr("dl_nogw")}</span>`:()=>`<span class="r">${tr("dl_lose",esc(name))}</span><br>${tr("dl_lostc",lostIds.map(i=>cn(BY(i))).join(", "))}`;
-    render();if(m.win&&m.got&&m.got.length)showVaultGot(m.got.map(vCar),tr("g_vault"),m.gain)},6700);
+    render();flash(!!m.win);if(m.win&&m.got&&m.got.length)showVaultGot(m.got.map(vCar),tr("g_vault"),m.gain)},6700);
 }
 function showGw(n,title){gotCars=[];$("gt").innerHTML=title;const g=$("gcar");g.className="gcars";g.innerHTML=`<div style="line-height:1.1">${gwIcon(84)}</div><b style="font-size:24px;min-height:0">+${n}</b>`;$("gsell").style.display="none";$("gok").textContent=tr("ok");$("got").classList.add("on");boom()}
 function renderLive(){
   const p=$("livecard"),head=`<h2 style="margin-top:0">${tr("dl_title")}</h2>`,v=NET.vault;
   if(DL.state==="search"){p.innerHTML=head+`<div class="note" style="font-size:15px;margin:10px 0" data-dls>${tr("dl_search",Math.floor((Date.now()-DL.t0)/1000))}</div><button class="ghost" data-dl="cancel">${tr("cancel")}</button>`;return}
   if(DL.state==="fight"&&DL.res){const m=DL.res;
-    p.innerHTML=head+`<div class="vs"><div class="car">${avTag(me().img,40)}<b style="min-height:0">${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</b></div><div class="arrow">⚔️</div><div class="car">${avTag(avOf(m.opp),40)}<b style="min-height:0">${esc(m.opp.name)}${vbadge(m.opp.pid,m.opp.ver)}</b>${showStrip(m.opp.show,true)}<span class="p">ID ${esc(m.opp.pid||"")}</span></div></div><div class="wheelbox"><div class="ptr"></div><canvas id="lwheel" width="540" height="540"></canvas><div class="hub"><span>${Math.round(m.p*100)}%</span><small>${tr("you")}</small></div></div>`;
+    p.innerHTML=head+`<div class="vs"><div class="car">${avTag(me().img,40)}<b style="min-height:0">${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</b></div><div class="arrow">⚔️</div><div class="car" data-opp="1" style="cursor:pointer">${(LASTOPP=m.opp,"")}${avTag(avOf(m.opp),40)}<b style="min-height:0">${esc(m.opp.name)}${vbadge(m.opp.pid,m.opp.ver)}</b><span class="p">ID ${esc(m.opp.pid||"")}</span></div></div><div class="wheelbox"><div class="ptr"></div><canvas id="lwheel" width="540" height="540"></canvas><div class="hub"><span>${Math.round(m.p*100)}%</span><small>${tr("you")}</small></div></div>`;
     drawSegs($("lwheel"),[[0,1,"#e5384a"],[0,m.p,"#3b82f6"]]);return}
   const st=v?vsel.filter(u=>v.cars.some(c=>c.u===u)).map(u=>vCar(v.cars.find(c=>c.u===u))):[];
   p.innerHTML=head+(DL.msg?`<div style="margin-bottom:10px">${DL.msg()}</div>`:"")+`<div class="note" style="margin-top:0;text-align:left">${tr("dl_rule")}</div><div class="row"><span>${tr("vault_title")}</span><b>${v?v.cars.length:0} ${tr("pcs")}</b></div>`+(st.length?`<div class="vs"><div class="car" style="width:60%">${stackHtml(st)}</div></div>`:"")+`<button class="ghost" data-dl="vault" ${netOn()&&v?"":"disabled"}>${tr(st.length?"vault_change":"vault_pick")}</button><button style="margin-top:8px" data-dl="find" ${netOn()&&st.length&&!spinning?"":"disabled"}>${tr("dl_find")}</button><div class="note">${netOn()?tr("dl_ratio"):tr("net_need")}</div>`;
@@ -821,12 +889,15 @@ const showUs=()=>Array.isArray(S.prof.show)?S.prof.show:[];
 const showCarIds=()=>showUs().map(u=>S.inv.find(o=>o.u===u)).filter(Boolean).map(o=>o.id).filter(id=>BY(id)).slice(0,3);
 let showSent="",showSel=[];
 function syncShow(){if(!netOn())return;const ids=showCarIds(),k=ids.join(",");if(k===showSent)return;showSent=k;netSend({t:"showc",cars:ids})}
-function renderHeadShow(){$("hshow").innerHTML=showStrip(showCarIds())||`<span class="hsph">⭐</span>`;syncShow()}
+function renderHeadShow(){syncShow()}
 function drawShow(){const L=inv();$("showpick").innerHTML=L.map(c=>`<div class="car ${showSel.includes(c.u)?"sel":""}" data-su="${c.u}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">—</div>`;$("showdone").textContent=tr("show_save",showSel.length)}
 function openShowPick(){showSel=showUs().filter(u=>S.inv.some(o=>o.u===u)).slice(0,3);drawShow();$("showov").classList.add("on")}
-$("hshow").onclick=openShowPick;$("pshowedit").onclick=openShowPick;
+$("pshowedit").onclick=openShowPick;
 $("showpick").onclick=e=>{const el=e.target.closest("[data-su]");if(!el)return;const u=+el.dataset.su;showSel=showSel.includes(u)?showSel.filter(x=>x!==u):(showSel.length<3?showSel.concat(u):showSel);drawShow()};
 $("showdone").onclick=()=>{S.prof.show=showSel.slice();save();$("showov").classList.remove("on");render()};
+function openPlayer(p){if(!p)return;$("pbody").innerHTML=`<div style="display:flex;justify-content:center">${avTag(avOf(p),72)}</div><div style="font-weight:800;font-size:19px;margin-top:8px">${esc(p.name)}${vbadge(p.pid,p.ver)}</div><div class="note" style="margin:2px 0 10px">ID ${esc(p.pid||"")}</div><h2 style="margin:6px 0">${tr("vault_show")}</h2>${showStrip(p.show,true)||`<div class="note">${tr("show_empty")}</div>`}`;$("pov").classList.add("on")}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-pl],[data-opp]");if(!a)return;if(a.dataset.pl!==undefined)openPlayer(LASTPLS[+a.dataset.pl]);else openPlayer(LASTOPP)});
+$("pclose").onclick=()=>$("pov").classList.remove("on");
 function renderProfileCard(){
   const un=NET.me&&NET.me.username||(tgUser&&tgUser.username)||"";
   $("pid").textContent=NET.me?NET.me.pid:S.pid;
@@ -853,7 +924,8 @@ function renderNow(){
   const L=inv();sel=sel.filter(i=>i<L.length);const cars=selCars(L);
   $("bal").textContent=money(S.bal);renderHeadShow();$("bal2").textContent=money(S.bal);$("gwchip").innerHTML=gwIcon(16)+" "+gwVal();
   $("res").innerHTML=RES?RES():"";
-  $("bsw").innerHTML=`<button data-sub="d" class="${bsub==="d"?"on":""}">⚔️ ${tr("tab_d")}</button><button data-sub="j" class="${bsub==="j"?"on":""}">🎰 ${tr("tab_j")}</button><button data-sub="r" class="${bsub==="r"?"on":""}">🏁 ${tr("tab_r")}</button>`;
+  $("bsw").innerHTML=`<button data-sub="d" class="${bsub==="d"?"on":""}">${IC.sw} ${tr("tab_d")}</button><button data-sub="j" class="${bsub==="j"?"on":""}">${IC.wheel} ${tr("tab_j")}</button><button data-sub="r" class="${bsub==="r"?"on":""}">${IC.flag} ${tr("tab_r")}</button>`;
+  if(pingSub){ping(document.querySelector(`#bsw [data-sub="${pingSub}"]`));pingSub=""}
   $("count").textContent=`— ${L.length} ${tr("pcs")} · ${money(sumP(L))}`;
   const grid=L.map((c,i)=>`<div class="car ${sel.includes(i)?"sel":""}" data-i="${i}">${cardHtml(c)}</div>`).join("")||'<div class="note" style="grid-column:1/4">—</div>';
   $("inv").innerHTML=grid;$("dinv").innerHTML=grid;$("jinv").innerHTML=grid;
@@ -908,14 +980,16 @@ function renderNow(){
 }
 
 /* ===== события ===== */
+let pingSub="";
+function ping(el){if(!el)return;el.classList.remove("go");void el.offsetWidth;el.classList.add("go");clearTimeout(el._pt);el._pt=setTimeout(()=>el.classList.remove("go"),1500)}
 function showTab(){
   document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("on",x.dataset.t===curTab));
   $("gear").classList.toggle("on",curTab==="x");
   ["w","d","j","r","g","s","q","m","p","x"].forEach(k=>$("sec-"+k).classList.toggle("on",curTab==="b"?k===bsub:k===curTab));
   $("bsw").style.display=curTab==="b"?"grid":"none";setBadge();window.scrollTo(0,0)}
-$("tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;curTab=b.dataset.t;showTab()};
-$("gear").onclick=()=>{curTab="x";showTab()};
-$("bsw").onclick=e=>{const b=e.target.closest("[data-sub]");if(!b)return;bsub=b.dataset.sub;showTab();render()};
+$("tabs").onclick=e=>{const b=e.target.closest("button");if(!b)return;curTab=b.dataset.t;showTab();ping(b)};
+$("gear").onclick=()=>{curTab="x";showTab();ping($("gear"))};
+$("bsw").onclick=e=>{const b=e.target.closest("[data-sub]");if(!b)return;bsub=b.dataset.sub;pingSub=bsub;showTab();render()};
 function toggleSel(e){if(spinning||boxBusy)return;if((DU.opp||DU.searching)&&e.currentTarget.id==="dinv")return;if((JP.parts||JP.searching)&&e.currentTarget.id==="jinv")return;
   const el=e.target.closest(".car");if(!el)return;const i=+el.dataset.i;sel=sel.includes(i)?sel.filter(x=>x!==i):sel.concat(i).sort((a,b)=>a-b);RES=null;if(!DU.opp)DU.msg="";render()}
 $("inv").onclick=toggleSel;$("dinv").onclick=toggleSel;$("jinv").onclick=toggleSel;
@@ -1031,7 +1105,7 @@ function duelSpin(){
   drot+=360*5+((360-(drot%360))%360)+(360-a*360);$("dwheel").style.transform=`rotate(${drot}deg)`;
   setTimeout(()=>{spinning=false;drot=0;DU.opp=null;DU.mine=null;
     DU.msg=win?()=>`<span class="g">${tr("d_win",BOTS[bi].n[ix()],nm(oppIds))}</span>`:()=>`<span class="r">${tr("d_lose",BOTS[bi].n[ix()],nm(mineIds))}</span>`;
-    render();if(win)showGot(oppCars.map(c=>Object.assign({},c)),tr("g_duel"))},6700);
+    render();flash(win);if(win)showGot(oppCars.map(c=>Object.assign({},c)),tr("g_duel"))},6700);
 }
 
 $("spin").onclick=()=>{
@@ -1055,7 +1129,7 @@ $("spin").onclick=()=>{
   sel=[];save();
   setTimeout(()=>{spinning=false;RES=msg;nextGold();
     const w=$("wheel");w.style.transition="none";rot=0;w.style.transform="rotate(0deg)";void w.offsetWidth;w.style.transition="";
-    render();if(cashAmt)showCash(cashAmt,tr("g_cash"));else if(got)showGot([got],tr(titleKey));else if(consol)playConsol(consol)},6700);
+    render();flash(out!=="lose");if(cashAmt)showCash(cashAmt,tr("g_cash"));else if(got)showGot([got],tr(titleKey));else if(consol)playConsol(consol)},6700);
 };
 // таймеры чёрного рынка: обновляем цифры, а полный экран перерисовываем, только когда что-то стало готово
 setInterval(()=>{
