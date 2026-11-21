@@ -1158,12 +1158,12 @@ $("vgrid").onclick=e=>{
 $("vdone").onclick=()=>{$("vaultov").classList.remove("on");render()};
 /* --- витрина: берётся из обычной коллекции, работает без сервера; другим игрокам видна, когда есть связь с сервером --- */
 const showUs=()=>Array.isArray(S.prof.show)?S.prof.show:[];
-const showCarIds=()=>showUs().map(u=>S.inv.find(o=>o.u===u)).filter(Boolean).map(o=>o.id).filter(id=>BY(id)).slice(0,3);
+const showCarIds=()=>showUs().map(u=>S.inv.concat(S.gar).find(o=>o.u===u)).filter(Boolean).map(o=>o.id).filter(id=>BY(id)).slice(0,3);
 let showSent="",showSel=[];
 function syncShow(){if(!netOn())return;const ids=showCarIds(),k=ids.join(",");if(k===showSent)return;showSent=k;netSend({t:"showc",cars:ids})}
 function renderHeadShow(){syncShow()}
-function drawShow(){const L=inv();$("showpick").innerHTML=L.map(c=>`<div class="car ${showSel.includes(c.u)?"sel":""}" data-su="${c.u}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">—</div>`;$("showdone").textContent=tr("show_save",showSel.length)}
-function openShowPick(){showSel=showUs().filter(u=>S.inv.some(o=>o.u===u)).slice(0,3);drawShow();$("showov").classList.add("on")}
+function drawShow(){const L=garAll();$("showpick").innerHTML=L.map(c=>`<div class="car ${showSel.includes(c.u)?"sel":""}" data-su="${c.u}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">—</div>`;$("showdone").textContent=tr("show_save",showSel.length)}
+function openShowPick(){showSel=showUs().filter(u=>S.inv.concat(S.gar).some(o=>o.u===u)).slice(0,3);drawShow();$("showov").classList.add("on")}
 $("pshowedit").onclick=openShowPick;
 $("showpick").onclick=e=>{const el=e.target.closest("[data-su]");if(!el)return;const u=+el.dataset.su;showSel=showSel.includes(u)?showSel.filter(x=>x!==u):(showSel.length<3?showSel.concat(u):showSel);drawShow()};
 $("showdone").onclick=()=>{S.prof.show=showSel.slice();save();$("showov").classList.remove("on");render()};
@@ -1359,8 +1359,7 @@ $("storecancel").onclick=()=>$("storeov").classList.remove("on");
 $("storedone").onclick=()=>{
   const all=S.inv.concat(S.gar);
   S.inv=all.filter(o=>!stSel.includes(o.u));S.gar=all.filter(o=>stSel.includes(o.u));
-  sel=[];showUsClean();save();$("storeov").classList.remove("on");render()};
-function showUsClean(){try{if(S.prof&&Array.isArray(S.prof.show))S.prof.show=S.prof.show.filter(u=>S.inv.some(o=>o.u===u))}catch(e){}}
+  sel=[];save();$("storeov").classList.remove("on");render()};
 $("rpanel").onclick=e=>{
   const rt=e.target.closest("[data-rt]");if(rt){RL.track=+rt.dataset.rt;render();return}
   const rl=e.target.closest("[data-rl]");
