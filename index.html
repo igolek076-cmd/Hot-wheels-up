@@ -187,6 +187,7 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 #rctl{display:flex;flex-direction:column;align-items:center;gap:2px}
 #rwheel{width:150px;height:150px;color:var(--text);touch-action:none}
 #rres{position:absolute;left:50%;top:38%;transform:translate(-50%,-50%);width:min(320px,90%);z-index:5;display:none}
+#storeov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#storeov.on{display:flex}#storeov .gbox .ci{height:72px}#storeov .gbox .car{font-size:11px}#storeov .gbox svg{width:60px}#storeov .car.stored{opacity:.85}
 #showov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#showov.on{display:flex}#showov .gbox .ci{height:72px}#showov .gbox .car{font-size:11px}#showov .gbox svg{width:60px}
 #pov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#pov.on{display:flex}#pshow .mini.big,#pov .mini.big{gap:10px;margin-top:10px}#pshow .mini.big .pic,#pov .mini.big .pic{height:64px}
 #vaultov{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}#vaultov.on{display:flex}
@@ -320,6 +321,8 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 
 <div class="sec" id="sec-g">
   <div class="card" id="gpanel"></div>
+  <button class="ghost" id="gstore" data-i="g_store"></button>
+  <div class="note" data-i="g_store_note"></div>
   <h2><span data-i="coll"></span></h2>
   <div class="grid" id="ginv"></div>
 </div>
@@ -361,12 +364,13 @@ button{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <button class="ghost" id="reset" data-i="reset"></button>
 </div>
 
-<div class="tabs" id="tabs"><button data-t="w" class="on"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path class="u1" style="--c:#ef4444" d="M4 8l8-5 8 5" stroke="#ef4444" stroke-width="3"/><path class="u2" style="--c:#f97316" d="M4 15l8-5 8 5" stroke="#f97316" stroke-width="3"/><path class="u3" style="--c:#facc15" d="M4 22l8-5 8 5" stroke="#facc15" stroke-width="3"/></svg></i><small data-i="tab_w"></small></button><button data-t="b"><i><svg class="ic isw" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="swA"><path d="M4.5 4.5L15 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M13 17.2l4.2-4.2" stroke="#f59e0b" stroke-width="2.4"/><path d="M16 16l3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="20.6" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><g class="swB"><path d="M19.5 4.5L9 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M11 17.2L6.8 13" stroke="#f59e0b" stroke-width="2.4"/><path d="M8 16l-3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="3.4" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><path class="spark" d="M12 6.8l1.1 3 3 1.1-3 1.1-1.1 3-1.1-3-3-1.1 3-1.1z" fill="#fde047" stroke="none"/></svg></i><small data-i="tab_b"></small></button><button data-t="s"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="bag"><path d="M5 8h14l-1 12H6z" fill="#22c55e" stroke="#15803d" stroke-width="1.5"/><path class="hdl" d="M9 8V6a3 3 0 016 0v2" stroke="#15803d" stroke-width="2"/></g></svg></i><small data-i="tab_s"></small></button><button data-t="q"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><circle class="t1" cx="12" cy="12" r="9.5" fill="#ef4444"/><circle class="t2" cx="12" cy="12" r="6.2" fill="#fff"/><circle class="t3" cx="12" cy="12" r="3.2" fill="#ef4444"/></svg></i><small data-i="tab_q"></small></button><button data-t="m"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="gl"><rect x="2" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><rect x="13.5" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><path d="M10.5 11h3M2 9h20" stroke="#7c3aed" stroke-width="2"/><path class="glint" d="M5 10.2l-1.6 4.6" stroke="#fff" stroke-width="1.6"/></g></svg></i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="g"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path d="M3 11l9-7 9 7v10H3z" fill="#3b82f6" stroke="#3b82f6" stroke-width="1"/><rect x="7" y="12" width="10" height="9" fill="#1e3a8a" stroke="none"/><circle cx="9.6" cy="19" r="1" fill="#fde047" stroke="none"/><circle cx="14.4" cy="19" r="1" fill="#fde047" stroke="none"/><g class="door"><rect x="7" y="12" width="10" height="9" fill="#dbeafe" stroke="none"/><path d="M7 15h10M7 18h10" stroke="#3b82f6" stroke-width="1.4"/></g></svg></i><small data-i="tab_g"></small></button><button data-t="p"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="per"><circle class="hd" cx="12" cy="8" r="4.5" fill="#ec4899" stroke="none"/><path d="M3.5 21c0-5 4-7.5 8.5-7.5s8.5 2.5 8.5 7.5z" fill="#ec4899" stroke="none"/></g></svg></i><small data-i="tab_p"></small></button></div>
+<div class="tabs" id="tabs"><button data-t="w" class="on"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path class="u1" style="--c:#ef4444" d="M4 8l8-5 8 5" stroke="#ef4444" stroke-width="3"/><path class="u2" style="--c:#f97316" d="M4 15l8-5 8 5" stroke="#f97316" stroke-width="3"/><path class="u3" style="--c:#facc15" d="M4 22l8-5 8 5" stroke="#facc15" stroke-width="3"/></svg></i><small data-i="tab_w"></small></button><button data-t="b"><i><svg class="ic isw" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="swA"><path d="M4.5 4.5L15 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M13 17.2l4.2-4.2" stroke="#f59e0b" stroke-width="2.4"/><path d="M16 16l3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="20.6" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><g class="swB"><path d="M19.5 4.5L9 15" stroke="#e2e8f0" stroke-width="2.4"/><path d="M11 17.2L6.8 13" stroke="#f59e0b" stroke-width="2.4"/><path d="M8 16l-3.6 3.6" stroke="#92400e" stroke-width="2.6"/><circle cx="3.4" cy="20.6" r="1.3" fill="#f59e0b" stroke="none"/></g><path class="spark" d="M12 6.8l1.1 3 3 1.1-3 1.1-1.1 3-1.1-3-3-1.1 3-1.1z" fill="#fde047" stroke="none"/></svg></i><small data-i="tab_b"></small></button><button data-t="s"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="bag"><path d="M5 8h14l-1 12H6z" fill="#22c55e" stroke="#15803d" stroke-width="1.5"/><path class="hdl" d="M9 8V6a3 3 0 016 0v2" stroke="#15803d" stroke-width="2"/></g></svg></i><small data-i="tab_s"></small></button><button data-t="q"><span class="bdg" id="bdgq">0</span><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><circle class="t1" cx="12" cy="12" r="9.5" fill="#ef4444"/><circle class="t2" cx="12" cy="12" r="6.2" fill="#fff"/><circle class="t3" cx="12" cy="12" r="3.2" fill="#ef4444"/></svg></i><small data-i="tab_q"></small></button><button data-t="m"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="gl"><rect x="2" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><rect x="13.5" y="9" width="8.5" height="7" rx="3" fill="#312e81"/><path d="M10.5 11h3M2 9h20" stroke="#7c3aed" stroke-width="2"/><path class="glint" d="M5 10.2l-1.6 4.6" stroke="#fff" stroke-width="1.6"/></g></svg></i><span class="bdg" id="bdg">!</span><small data-i="tab_m"></small></button><button data-t="g"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><path d="M3 11l9-7 9 7v10H3z" fill="#3b82f6" stroke="#3b82f6" stroke-width="1"/><rect x="7" y="12" width="10" height="9" fill="#1e3a8a" stroke="none"/><circle cx="9.6" cy="19" r="1" fill="#fde047" stroke="none"/><circle cx="14.4" cy="19" r="1" fill="#fde047" stroke="none"/><g class="door"><rect x="7" y="12" width="10" height="9" fill="#dbeafe" stroke="none"/><path d="M7 15h10M7 18h10" stroke="#3b82f6" stroke-width="1.4"/></g></svg></i><small data-i="tab_g"></small></button><button data-t="p"><i><svg class="ic " viewBox="0 0 24 24" width="22" height="22" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:block;overflow:visible"><g class="per"><circle class="hd" cx="12" cy="8" r="4.5" fill="#ec4899" stroke="none"/><path d="M3.5 21c0-5 4-7.5 8.5-7.5s8.5 2.5 8.5 7.5z" fill="#ec4899" stroke="none"/></g></svg></i><small data-i="tab_p"></small></button></div>
 <div id="shareov"><div class="gbox"><div class="gt" data-i="share_title"></div><div class="linkbox" id="slink"></div><div style="display:flex;gap:8px;margin-top:12px"><button class="buy" id="scopy" data-i="copy"></button><button id="sshare" data-i="share"></button></div><div class="note" id="smsg" style="min-height:16px"></div><button class="ghost" id="sclose" data-i="close"></button></div></div>
 <div id="selov"><div class="gbox"><div class="gt" data-i="sel_title"></div><div class="grid" id="selgrid" style="max-height:50vh;overflow:auto"></div><button id="seldone" style="margin-top:12px"></button></div></div>
 <div id="raceov"><div class="rhud"><b id="rpos">1/5</b><b id="rtime">0:00</b><button class="ghost" id="rquit">✕</button></div><canvas id="rcv" width="360" height="440"></canvas>
 <div id="rctl"><svg id="rwheel" viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="10"/><circle cx="50" cy="50" r="9" fill="currentColor"/><path d="M50 50 L12 50 M50 50 L88 50 M50 50 L50 86" stroke="currentColor" stroke-width="8" stroke-linecap="round"/><rect x="45" y="4" width="10" height="9" rx="2" fill="#e5384a"/></svg><div class="note" data-i="race_hint" style="margin:0"></div></div>
 <div id="rres"></div></div>
+<div id="storeov"><div class="gbox"><div class="gt" data-i="g_store_title"></div><div class="note" data-i="g_store_hint" style="margin:0 0 10px;text-align:left"></div><div class="grid" id="storegrid" style="max-height:50vh;overflow:auto"></div><button id="storedone" style="margin-top:12px"></button><button class="ghost" id="storecancel" data-i="cancel"></button></div></div>
 <div id="showov"><div class="gbox"><div class="gt" data-i="vault_show"></div><div class="note" data-i="show_pick_note" style="margin:0 0 10px;text-align:left"></div><div class="grid" id="showpick" style="max-height:50vh;overflow:auto"></div><button id="showdone" style="margin-top:12px"></button></div></div>
 <div id="pov"><div class="gbox"><div id="pbody" style="text-align:center"></div><button class="ghost" id="pclose" data-i="close" style="margin-top:12px"></button></div></div>
 <div id="vaultov"><div class="gbox"><div class="gt"><span data-i="vault_title"></span> <span style="font-size:14px" id="vgw"></span></div><div class="note" data-i="vault_note" style="margin:0 0 10px;text-align:left"></div><div class="sw" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:10px" id="vtabs"></div><div class="grid" id="vgrid" style="max-height:42vh;overflow:auto"></div><button id="vdone" style="margin-top:12px"></button></div></div>
@@ -464,16 +468,16 @@ rr_dq:["Дисквалификация: нереальная скорость","
 dl_title:["🌐 Дуэль с живым игроком","🌐 Duel vs a live player"],dl_rule:["Ставишь машинки из онлайн-коллекции. Победитель забирает ставку соперника и с шансом 50% получает золотое колесо.","You stake cars from the online collection. The winner takes the opponent’s stake and has a 50% chance to get a golden wheel."],
 dl_find:["🔍 Найти живого игрока","🔍 Find a live player"],dl_search:["Ищем живого игрока… {0} с","Looking for a live player… {0}s"],dl_win:["🏆 Победа над {0}!","🏆 You beat {0}!"],dl_lose:["💥 Победил(а) {0}","💥 {0} won"],
 dl_win_gw:["Золотое колесо: +1","Golden wheel: +1"],dl_nogw:["Золотое колесо на этот раз не выпало","No golden wheel this time"],dl_none:["Живой игрок не найден","No live player found"],g_gw:["🛞 Золотое колесо!","🛞 Golden wheel!"],
-tab_g:["Гараж","Garage"],tab_r:["Гонка","Race"],q_reset:["Задания обновятся через {0}. Забирай награды до обновления!","Quests refresh in {0}. Claim your rewards before that!"],
+tab_g:["Гараж","Garage"],g_store:["📦 Положить хотвилсы","📦 Store Hot Wheels"],g_store_note:["Освобождает место в прокачке и защищает ваши хотвилсы от случайных прокрутов.","Frees up space in Upgrade and protects your Hot Wheels from accidental spins."],g_store_title:["Хранение","Storage"],g_store_hint:["Отметь хотвилсы, которые уберём на хранение. Они пропадут из «Прокачки». Сними отметку, чтобы вернуть машинку.","Select the Hot Wheels to put into storage. They will disappear from Upgrade. Unselect one to take it back."],g_store_save:["Готово ({0})","Done ({0})"],g_stored:["📦 На хранении","📦 In storage"],tab_r:["Гонка","Race"],q_reset:["Задания обновятся через {0}. Забирай награды до обновления!","Quests refresh in {0}. Claim your rewards before that!"],
 g_consol:["🎁 Утешительный приз!","🎁 Consolation prize!"],r_consol:["🎁 Утешительный приз: {0}","🎁 Consolation prize: {0}"],r_consol_cash:["🎁 Утешительный приз: {0}","🎁 Consolation prize: {0}"],case_c:["🎁 Утешительный приз…","🎁 Consolation prize…"],
 pick_btn:["🚗 Выбрать машинки","🚗 Choose cars"],sel_title:["Выбери машинки для ставки","Choose cars to stake"],sel_done:["Готово ({0})","Done ({0})"],no_cars:["Нет машинок","No cars"],kmh:["км/ч","km/h"],
 g_pick:["Выбери машинку, чтобы улучшить её или сделать гоночной.","Pick a car to tune it or make it your racer."],g_speed:["Скорость","Speed"],g_level:["Уровень тюнинга","Tuning level"],g_max:["Максимальный уровень","Max level"],g_next:["После улучшения: {0}","After tuning: {0}"],g_up:["🔧 Улучшить за {0}","🔧 Tune for {0}"],g_racer:["🏁 Сделать гоночной","🏁 Make my racer"],g_isracer:["🏁 Это твоя гоночная","🏁 This is your racer"],
 race_rules:["Скорость машинки зависит от её цены и тюнинга из гаража. Рули, чтобы держаться дороги и объезжать конусы. Награда зависит от занятого места.","Your car’s speed depends on its price and garage tuning. Steer to stay on the road and dodge the cones. The prize depends on your place."],
 race_nocar:["Для гонки нужна хотя бы одна машинка.","You need at least one car to race."],race_create:["➕ Создать лобби","➕ Create lobby"],race_join:["🚪 Войти в лобби","🚪 Join a lobby"],race_garage:["🔧 Гараж","🔧 Garage"],
-race_offline:["Серверов пока нет: лобби создают боты. В гонке 5 игроков, свободные места через 25 секунд займут боты.","There are no servers yet: lobbies are made by bots. A race has 5 players and free spots are filled by bots after 25 seconds."],
+race_offline:["Серверов пока нет: лобби создают боты. В гонке 5 игроков, они находятся быстро: свободные места займут боты за 8 секунд.","There are no servers yet: lobbies are made by bots. A race has 5 players, they are found fast: free spots are filled by bots within 8 seconds."],
 race_track:["Трасса","Track"],race_make:["Создать лобби","Create lobby"],race_lobbies:["Готовые лобби","Open lobbies"],race_enter:["Войти","Join"],race_refresh:["🔄 Обновить список","🔄 Refresh list"],
 race_wait:["Ищем игроков…","Looking for players…"],race_filled:["Не хватило игроков: свободные места заняли боты 🤖","Not enough players: free spots were taken by bots 🤖"],race_go:["Старт через {0}","Starting in {0}"],
-race_place:["{0}-е место!","Place {0}!"],race_noprize:["Без награды","No prize"],race_done:["Готово","Done"],race_hint:["Крути руль пальцем (или стрелками ← →)","Turn the wheel with your finger (or ← → keys)"],races:["Гонки (победы / всего)","Races (wins / total)"]};
+race_place:["{0}-е место!","Place {0}!"],lava_burn:["Вы сгорели!","You burned up!"],lava_chicken:["Вы лава чикен!","You are a lava chicken!"],race_noprize:["Без награды","No prize"],race_done:["Готово","Done"],race_hint:["Крути руль пальцем (или стрелками ← →)","Turn the wheel with your finger (or ← → keys)"],races:["Гонки (победы / всего)","Races (wins / total)"]};
 const tr=(k,...a)=>{if(!D[k])return k;let s=D[k][S.set.lang==="en"?1:0];a.forEach((v,i)=>s=s.replace("{"+i+"}",()=>v));return s};
 const R={c:{n:"Mainline",col:"#8a8a99"},p:{n:"Rare",col:"#3b82f6"},a:{n:"",col:"#8b5cf6"},t:{n:"Treasure Hunt",col:"#22b35e"},s:{n:"Super TH",col:"#d99a00"},m:{n:"MOBFARM",col:"#e91e8c"}};
 const rn=k=>k==="a"?tr("r_a"):R[k].n;
@@ -568,11 +572,13 @@ function norm(v){v.inv=v.inv.map(x=>typeof x==="number"?{id:x,pb:0}:x);v.uid=v.u
   v.set=Object.assign({th:"fire",mode:"auto",lang:"ru",cur:"rub"},v.set||{});
   if(!v.prof)v.prof={name:"",av:0};if(!v.pid)v.pid=String(10000000+Math.floor(Math.random()*90000000));if(v.gwc==null)v.gwc=0;if(v.ratc==null)v.ratc=1000;
   v.st=Object.assign({spins:0,wins:0,buys:0,sells:0,prem:0,gold:0,duels:0,dwins:0,jp:0,jpw:0,races:0,racew:0,sets:0,boxes:0},v.st||{});
-  if(!v.q0)v.q0=Date.now();if(!v.qbase)v.qbase=Object.assign({},v.st);Object.keys(v.st).forEach(k=>{if(v.qbase[k]==null)v.qbase[k]=v.st[k]});v.cl=v.cl||{};if(!v.shop)v.shop=[];return v}
+  if(!v.q0)v.q0=Date.now();if(!v.qbase)v.qbase=Object.assign({},v.st);Object.keys(v.st).forEach(k=>{if(v.qbase[k]==null)v.qbase[k]=v.st[k]});v.cl=v.cl||{};if(!v.shop)v.shop=[];if(!Array.isArray(v.gar))v.gar=[];v.gar.forEach(o=>{if(!o.u)o.u=++v.uid});return v}
 function fresh(){return norm({xp:0,bal:400,inv:[0,1],st:{},cl:{},shop:[],bonus:null,luck:0,dep:[],set:{}})}
 function save(){try{localStorage.setItem("hw_state4",JSON.stringify(S))}catch(e){}}
 function load(){for(const k of["hw_state4","hw_state3"]){try{const v=JSON.parse(localStorage.getItem(k));if(v&&Array.isArray(v.inv))return norm(v)}catch(e){}}return null}
-const inv=()=>S.inv.map(o=>{const c=BY(o.id);return Object.assign({},c,{price:c.price+(o.pb||0),tn:o.tn||0,u:o.u})});
+const mapO=o=>{const c=BY(o.id);return Object.assign({},c,{price:c.price+(o.pb||0),tn:o.tn||0,u:o.u})};
+const inv=()=>S.inv.map(mapO);
+const garAll=()=>S.inv.map(mapO).concat(S.gar.map(o=>Object.assign(mapO(o),{st:1})));
 const selCars=L=>sel.map(i=>L[i]).filter(Boolean);
 const stakeKey=()=>sel.map(i=>S.inv[i]?S.inv[i].id:0).sort((a,b)=>a-b).join("-");
 
@@ -857,7 +863,7 @@ const tuneCost=c=>Math.max(50,Math.round(BY(c.id).price*.18*((c.tn||0)+1)/10)*10
 const racerCar=L=>L.find(c=>c.u===S.racer)||L.slice().sort((a,b)=>carSpeed(b)-carSpeed(a))[0]||null;
 const spdTxt=v=>Math.round(v/2)+" "+tr("kmh");
 function renderGarage(L){
-  $("ginv").innerHTML=L.map(c=>`<div class="car ${c.u===gsel?"sel":""}" data-u="${c.u}">${cardHtml(c)}<div class="note" style="margin:2px 0 0">${S.racer===c.u?"🏁 ":""}${spdTxt(carSpeed(c))}</div></div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
+  $("ginv").innerHTML=L.map(c=>`<div class="car ${c.u===gsel?"sel":""}" data-u="${c.u}">${cardHtml(c)}<div class="note" style="margin:2px 0 0">${c.st?"📦 ":""}${S.racer===c.u?"🏁 ":""}${spdTxt(carSpeed(c))}</div></div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
   const c=L.find(x=>x.u===gsel),p=$("gpanel");
   if(!c){p.innerHTML=`<div class="note">${tr("g_pick")}</div>`;return}
   const max=(c.tn||0)>=5,cost=tuneCost(c),next=Object.assign({},c,{tn:(c.tn||0)+1});
@@ -874,21 +880,31 @@ function renderGarage(L){
 const TRACKS=[
  {n:["Городская","City"],len:8000,A:70,w1:1800,B:30,w2:900,hw:100,obs:10,grass:"#3f8f4f",road:"#4a4a55"},
  {n:["Серпантин","Mountain"],len:9500,A:90,w1:1800,B:35,w2:1000,hw:85,obs:14,grass:"#6b7f5a",road:"#55504a"},
- {n:["Пустыня","Desert"],len:7000,A:50,w1:2200,B:20,w2:1100,hw:120,obs:7,grass:"#d9b46a",road:"#6b5f55"}];
+ {n:["Пустыня","Desert"],len:7000,A:50,w1:2200,B:20,w2:1100,hw:120,obs:7,grass:"#d9b46a",road:"#6b5f55"},
+ {n:["Каньон","Canyon"],len:10500,A:115,w1:1500,B:50,w2:800,hw:70,obs:20,grass:"#a8552e",road:"#5a4038",mul:1.5},
+ {n:["🌋 Лава","🌋 Lava"],len:9000,A:105,w1:1400,B:45,w2:750,hw:76,obs:14,grass:"#b91c1c",road:"#3b2f33",lava:true,mul:2},
+ {n:["Лёд","Ice"],len:10000,A:120,w1:1300,B:55,w2:650,hw:68,obs:18,grass:"#cfe6f2",road:"#7f95a8",slip:true,mul:2},
+ {n:["Хардкор","Hardcore"],len:12000,A:135,w1:1200,B:65,w2:600,hw:56,obs:28,grass:"#2d3b2d",road:"#2b2b33",mul:3}];
 const trCenter=(T,d)=>T.A*Math.sin(d/T.w1*6.2832)+T.B*Math.sin(d/T.w2*6.2832+1.3);
-const RWAIT=25000,PRIZE=[300,180,100,40,0],PXP=[40,25,15,10,5];
+const RWAIT=25000,RFAST=8000,PRIZE=[300,180,100,40,0],PXP=[40,25,15,10,5];
 let RL={view:"idle",track:0,lobbies:[],w:null},RC=null;
 const botsOrder=()=>BOTS.map((_,i)=>i).sort(()=>Math.random()-.5);
-function genLobbies(){const bi=botsOrder();RL.lobbies=Array.from({length:4},(_,i)=>({id:i,host:bi[i%bi.length],track:Math.floor(Math.random()*TRACKS.length),n:1+Math.floor(Math.random()*3)}))}
+function genLobbies(){const bi=botsOrder(),NEW=3;RL.lobbies=Array.from({length:4},(_,i)=>({id:i,host:bi[i%bi.length],track:i<2?NEW+Math.floor(Math.random()*(TRACKS.length-NEW)):Math.floor(Math.random()*TRACKS.length),n:1+Math.floor(Math.random()*3)}));RL.lobbies.sort(()=>Math.random()-.5);RL.lobbies.forEach((l,i)=>l.id=i)}
 function openWait(track,pre){
   const slots=[{me:true}].concat(pre||[]);while(slots.length<5)slots.push(null);
-  RL.w={track,t0:Date.now(),filled:false,slots};RL.view="wait";render()}
+  RL.w={track,t0:Date.now(),filled:false,slots,wait:netOn()?RWAIT:RFAST};RL.view="wait";render()}
 function raceTick(){
-  const w=RL.w;if(!w||RL.view!=="wait")return;const el=Date.now()-w.t0;
+  const w=RL.w;if(!w||RL.view!=="wait")return;const el=Date.now()-w.t0,W_=w.wait||RWAIT;
   if(!w.filled){
-    if(el>=RWAIT){const used=new Set(w.slots.filter(s=>s&&!s.me).map(s=>s.bi)),free=botsOrder().filter(b=>!used.has(b));
+    const used=new Set(w.slots.filter(s=>s&&!s.me).map(s=>s.bi));
+    if(w.e0==null)w.e0=w.slots.filter(s=>!s).length;
+    if(el>=W_){const free=botsOrder().filter(b=>!used.has(b));
       w.slots=w.slots.map(s=>s||{bi:free.shift(),filler:true});w.filled=true;w.t1=Date.now();render()}
-    else{const e=document.querySelector("[data-rtm]");if(e)e.textContent=Math.max(0,Math.ceil((RWAIT-el)/1000))}
+    else{
+      // игроки подтягиваются по одному, а не все в самом конце
+      const empty=w.slots.filter(s=>!s).length,target=Math.floor(el/W_*w.e0);
+      if(w.e0-empty<target&&empty>0){const free=botsOrder().filter(b=>!used.has(b));w.slots[w.slots.indexOf(null)]={bi:free.shift(),filler:true};render();return}
+      const e=document.querySelector("[data-rtm]");if(e)e.textContent=Math.max(0,Math.ceil((W_-el)/1000))}
   }else{
     const c=3-(Date.now()-w.t1)/1000;
     if(c<=0)startRace();else{const e=document.querySelector("[data-rcd]");if(e)e.textContent=tr("race_go",Math.ceil(c))}
@@ -901,7 +917,7 @@ function renderRace(L){
     const slots=Array.from({length:5},(_,i)=>pls[i]?`<div class="rslot" data-pl="${i}" style="cursor:pointer">${avTag(avOf(pls[i]),40)}<small>${esc(pls[i].name)}${vbadge(pls[i].pid,pls[i].ver)}</small></div>`:`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${gwIcon(16)} ${tr("race_ranked")}</b><span>${pls.length}/5</span></div><div class="rslots">${slots}</div><div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><div class="note">${tr("race_ranked_rule",m?m.needed:3)}</div><button class="ghost" data-rc="rcancel">${tr("cancel")}</button>`;return}
   if(RL.view==="wait"&&w){
-    const left=Math.max(0,Math.ceil((RWAIT-(Date.now()-w.t0))/1000));
+    const left=Math.max(0,Math.ceil(((w.wait||RWAIT)-(Date.now()-w.t0))/1000));
     const slots=w.slots.map(s=>s?(s.me?`<div class="rslot">${avTag(me().img,40)}<small>${esc(me().name)}${vbadge(myPid(),NET.me&&NET.me.ver)}</small></div>`:`<div class="rslot">${avTag(BOTS[s.bi].img,40)}<small>${BOTS[s.bi].n[x]}${s.filler?" 🤖":""}</small></div>`):`<div class="rslot"><span class="avt" style="width:40px;height:40px;background:var(--line)"></span><small>⏳</small></div>`).join("");
     p.innerHTML=`<div class="row"><b>${TRACKS[w.track].n[x]}</b><span>${w.slots.filter(Boolean).length}/5</span></div><div class="rslots">${slots}</div>`+
       (w.filled?`<div class="note" style="font-size:18px;margin:12px 0"><b data-rcd>${tr("race_go",3)}</b></div><div class="note">${tr("race_filled")}</div>`:`<div style="text-align:center;margin:12px 0"><div style="font-size:38px;font-weight:800" data-rtm>${left}</div><div class="note" style="margin:0">${tr("race_wait")}</div></div><button class="ghost" data-rc="cancel">${tr("cancel")}</button>`);
@@ -915,7 +931,7 @@ function renderRace(L){
   p.innerHTML=head+`<div style="display:flex;gap:8px;margin-top:10px"><button data-rc="create">${tr("race_create")}</button><button data-rc="list">${tr("race_join")}</button></div><button class="ghost" data-rc="ranked" ${netOn()?"":"disabled"}>${gwIcon(16)} ${tr("race_ranked")}</button><div class="note">${netOn()?tr("race_ranked_note"):tr("net_need")}</div><button class="ghost" data-rc="garage">${tr("race_garage")}</button><div class="note">${tr("race_offline")}</div>`;
 }
 function startRace(){
-  const w=RL.w;if(!w)return;const L=inv(),mine=racerCar(L);
+  const w=RL.w;if(!w)return;const L=garAll(),mine=racerCar(L);
   if(!mine){RL.view="idle";RL.w=null;render();return}
   const parts=[{me:true,name:me().name,img:me().img,speed:carSpeed(mine)}];
   w.slots.forEach(s=>{if(s&&!s.me){const b=BOTS[s.bi],pr=Math.max(100,Math.min(20000,mine.price*(.5+Math.random()*1.3)));
@@ -952,31 +968,48 @@ function raceUpdate(dt){
       if(p.bot){p.d=botDist(p,R_.t);p.x=trCenter(T,p.d)+Math.sin(R_.t*.9+p.ph)*T.hw*.25;p.v=p.speed;if(p.d>=T.len&&p.fin===null)p.fin=R_.t;continue}
     }
     const c=trCenter(T,p.d);
-    if(i===0){const steer=Math.max(-1,Math.min(1,wAng/70));p.x+=steer*300*dt}
+    if(i===0){const steer=Math.max(-1,Math.min(1,wAng/70));if(T.slip){p.sv=(p.sv||0)+(steer-(p.sv||0))*Math.min(1,dt*2.2);p.x+=p.sv*300*dt}else p.x+=steer*300*dt}
     else{const tgt=c+Math.sin(R_.t*.9+p.ph)*T.hw*.35*(1-p.skill*.6);p.x+=Math.max(-300*dt,Math.min(300*dt,tgt-p.x))}
     const off=Math.abs(p.x-c)>T.hw;
     if(p.slow>0)p.slow-=dt;
     p.v=p.speed*(off?.55:1)*(p.slow>0?.45:1)*(i===0?1:1+.05*Math.sin(R_.t*.7+p.ph));
     p.d+=p.v*dt;
+    if(T.lava&&i===0&&Math.abs(p.x-c)>T.hw+5&&!R_.opts.ranked){lavaOut();return}
     for(let k=0;k<R_.obs.length;k++){const o=R_.obs[k];
       if(!p.hit.has(k)&&Math.abs(o.d-p.d)<14&&Math.abs(o.x-p.x)<20){p.hit.add(k);if(i===0||Math.random()<.5)p.slow=.9}}
     if(p.d>=T.len){p.fin=R_.t;if(i===0){if(R_.opts.ranked){netSend({t:"fin"})}else raceFinish()}}
   }
 }
+function lavaOut(){
+  const R_=RC,me_=R_.parts[0];if(R_.done)return;R_.done=true;me_.fin=R_.t;R_.place=R_.parts.length;
+  const chicken=Math.random()<.25;
+  $("rres").innerHTML=`<div class="gbox" style="max-height:none"><div style="font-size:54px">${chicken?"🐔":"🔥"}</div><div class="gt">${tr(chicken?"lava_chicken":"lava_burn")}</div><div style="font-size:15px;margin:6px 0 12px">${tr("race_noprize")}</div><button id="rdone">${tr("race_done")}</button></div>`;
+  $("rres").style.display="block";raceDraw();flash(false)}
 function raceSendPos(dt){
   const R_=RC,me_=R_.parts[0];if(!R_.opts.ranked||R_.count>0||me_.fin!==null)return;
   R_.pt=(R_.pt||0)+dt;if(R_.pt>=.1){R_.pt=0;netSend({t:"pos",d:Math.round(me_.d),x:Math.round(me_.x)})}
 }
 function raceDraw(){
   const cv=$("rcv"),g=cv.getContext("2d"),W=360,H=440,k=.8,cy=330,kx=.7,T=RC.T,me_=RC.parts[0],camX=trCenter(T,me_.d);
+  // холст рисуется в удвоенном разрешении, дорога собирается из гладких многоугольников, а не из ступенек
+  const dpr=Math.max(2,Math.min(3,window.devicePixelRatio||1));
+  if(cv.width!==W*dpr){cv.width=W*dpr;cv.height=H*dpr}
+  g.setTransform(dpr,0,0,dpr,0,0);
   g.fillStyle=T.grass;g.fillRect(0,0,W,H);
-  for(let y=0;y<H;y+=3){
-    const d=me_.d+(cy-y)/k,c=180+(trCenter(T,d)-camX)*kx,hw=T.hw*kx;
-    g.fillStyle=T.road;g.fillRect(c-hw,y,hw*2,3.2);
-    g.fillStyle=Math.floor(d/70)%2?"#e5384a":"#fff";g.fillRect(c-hw-5,y,5,3.2);g.fillRect(c+hw,y,5,3.2);
-    if(d>0&&Math.floor(d/90)%2){g.fillStyle="rgba(255,255,255,.5)";g.fillRect(c-1.5,y,3,3.2)}
-    if(d>=T.len&&d<T.len+28){for(let xx=c-hw;xx<c+hw;xx+=10){g.fillStyle=((Math.floor((xx-c+hw)/10)+Math.floor(y/3))%2)?"#fff":"#111";g.fillRect(xx,y,10,3.2)}}
-  }
+  const ST=3,hw=T.hw*kx,P=[];
+  for(let y=-ST;y<=H+ST;y+=ST){const d=me_.d+(cy-y)/k;P.push({y,d,c:180+(trCenter(T,d)-camX)*kx})}
+  const quad=(i,l,r,col)=>{const p=P[i],q=P[i+1];g.fillStyle=col;g.beginPath();g.moveTo(p.c+l,p.y);g.lineTo(p.c+r,p.y);g.lineTo(q.c+r,q.y+.6);g.lineTo(q.c+l,q.y+.6);g.closePath();g.fill()};
+  if(T.lava){for(let i=0;i<P.length-1;i++){const d=P[i].d;
+    if(Math.floor((d+RC.t*50)/60)%2){g.fillStyle="rgba(251,146,60,.5)";g.fillRect(0,P[i].y,W,ST+.6)}
+    if(Math.floor((d*1.7-RC.t*35)/40)%3===0){g.fillStyle="rgba(253,224,71,.28)";g.fillRect(0,P[i].y,W,ST+.6)}}}
+  g.fillStyle=T.road;g.beginPath();g.moveTo(P[0].c-hw,P[0].y);
+  for(let i=1;i<P.length;i++)g.lineTo(P[i].c-hw,P[i].y);
+  for(let i=P.length-1;i>=0;i--)g.lineTo(P[i].c+hw,P[i].y);
+  g.closePath();g.fill();
+  for(let i=0;i<P.length-1;i++){const d=P[i].d,col=Math.floor(d/70)%2?"#e5384a":"#fff";
+    quad(i,-hw-5,-hw,col);quad(i,hw,hw+5,col);
+    if(d>0&&Math.floor(d/90)%2)quad(i,-1.5,1.5,"rgba(255,255,255,.5)");
+    if(d>=T.len&&d<T.len+28){const c=P[i].c;for(let xx=c-hw;xx<c+hw;xx+=10){g.fillStyle=((Math.floor((xx-c+hw)/10)+i)%2)?"#fff":"#111";g.fillRect(xx,P[i].y,Math.min(10,c+hw-xx),ST+.6)}}}
   for(const o of RC.obs){const y=cy-(o.d-me_.d)*k;if(y<-20||y>H+20)continue;const x=180+(o.x-camX)*kx;
     g.fillStyle="#ff7a1a";g.beginPath();g.moveTo(x,y-11);g.lineTo(x+9,y+8);g.lineTo(x-9,y+8);g.closePath();g.fill();g.fillStyle="#fff";g.fillRect(x-5,y+1,10,3)}
   const avatar=(p,x,y,r,ring)=>{g.save();g.beginPath();g.arc(x,y,r,0,7);g.clip();
@@ -1002,7 +1035,7 @@ function raceFinish(){
   const R_=RC,me_=R_.parts[0];if(R_.done)return;R_.done=true;
   // место: кто финишировал раньше или успел бы раньше по текущей скорости
   const place=1+R_.parts.slice(1).filter(b=>(b.fin!==null?b.fin:R_.t+(R_.T.len-b.d)/Math.max(30,b.v||b.speed))<R_.t).length;
-  R_.place=place;const prize=PRIZE[place-1]||0;
+  R_.place=place;const prize=Math.round((PRIZE[place-1]||0)*(R_.T.mul||1));
   S.bal+=prize;S.xp+=PXP[place-1]||5;if(place===1)S.st.racew++;save();
   $("rres").innerHTML=`<div class="gbox" style="max-height:none"><div class="gt">${place===1?"🏆":"🏁"} ${tr("race_place",place)}</div><div style="font-size:15px;margin:6px 0 12px">${prize?`<b class="g">+${money(prize)}</b>`:tr("race_noprize")}</div><button id="rdone">${tr("race_done")}</button></div>`;
   $("rres").style.display="block";raceDraw();if(place===1)flash(true);
@@ -1153,7 +1186,8 @@ setInterval(()=>{if(DL.state==="search"){const e=document.querySelector("[data-d
   if(RL.view==="rwait"&&NET.rl){const e=document.querySelector("[data-rtm]");if(e)e.textContent=Math.max(0,Math.ceil((NET.rl.left-(Date.now()-NET.rlAt))/1000))}},500);
 
 /* ===== отрисовка ===== */
-function setBadge(){$("bdg").style.display=S.dep.some(readyD)&&curTab!=="m"?"flex":"none"}
+function setBadge(){$("bdg").style.display=S.dep.some(readyD)&&curTab!=="m"?"flex":"none";
+  const qn=QUESTS.filter(q=>!S.cl[q.id]&&qProg(q.k)>=q.n).length,qb=$("bdgq");qb.textContent=qn;qb.style.display=qn?"flex":"none"}
 let renderPending=false,spinSince=0;
 /* пока крутится любое колесо, экран не перерисовываем: иначе колесо подменяется на новое, а ставка и приз «прыгают» раньше времени */
 function render(){
@@ -1180,7 +1214,7 @@ function renderNow(){
   $("spin").disabled=!t||spinning;
   const sb=$("sell");sb.style.display=cars.length?"block":"none";sb.disabled=spinning;
   if(cars.length)sb.textContent=cars.length===1?tr("sell_btn",cn(cars[0]),money(sellPrice(cars[0]))):tr("sell_sel",cars.length,money(cars.reduce((s,c)=>s+sellPrice(c),0)));
-  drawWheel();renderDuel(L);renderJackpot(L);renderGarage(L);renderRace(L);renderLive();renderProfileCard();qTimerUpdate();
+  drawWheel();renderDuel(L);renderJackpot(L);renderGarage(garAll());renderRace(garAll());renderLive();renderProfileCard();qTimerUpdate();
 
   const box=canBox();
   $("offers").innerHTML=(box?`<div class="card offer"><div class="car" style="border:0">${imgTag(BOXIMG,"ci")}</div><div class="info"><b>${tr("box_t")}</b><span class="note" style="display:block;text-align:left">${tr("box_d")}</span><button class="buy" data-box="1" style="margin-top:8px" ${boxBusy?"disabled":""}>${tr("open")}</button></div></div>`:"")+
@@ -1310,8 +1344,23 @@ $("seldone").onclick=()=>{$("selov").classList.remove("on");RES=null;if(!DU.opp)
 $("ginv").onclick=e=>{const el=e.target.closest(".car");if(!el)return;gsel=+el.dataset.u;render()};
 $("gpanel").onclick=e=>{
   const t=e.target.closest("[data-tune]");
-  if(t){const o=S.inv.find(x=>x.u===+t.dataset.tune);if(!o)return;const c=inv().find(x=>x.u===o.u),cost=tuneCost(c);if((o.tn||0)>=5||S.bal<cost)return;S.bal-=cost;o.tn=(o.tn||0)+1;save();render();return}
+  if(t){const o=S.inv.concat(S.gar).find(x=>x.u===+t.dataset.tune);if(!o)return;const c=garAll().find(x=>x.u===o.u),cost=tuneCost(c);if((o.tn||0)>=5||S.bal<cost)return;S.bal-=cost;o.tn=(o.tn||0)+1;save();render();return}
   const r=e.target.closest("[data-racer]");if(r){S.racer=+r.dataset.racer;save();render()}};
+/* ===== хранение: выбранные хотвилсы уходят из «Прокачки» в гараж ===== */
+let stSel=[];
+function drawStore(){
+  const L=garAll();
+  $("storegrid").innerHTML=L.map(c=>`<div class="car ${stSel.includes(c.u)?"sel":""}" data-stu="${c.u}">${cardHtml(c)}</div>`).join("")||`<div class="note" style="grid-column:1/4">${tr("no_cars")}</div>`;
+  $("storedone").textContent=tr("g_store_save",stSel.length);
+}
+$("gstore").onclick=()=>{if(spinning)return;stSel=S.gar.map(o=>o.u);drawStore();$("storeov").classList.add("on")};
+$("storegrid").onclick=e=>{const el=e.target.closest("[data-stu]");if(!el)return;const u=+el.dataset.stu;stSel=stSel.includes(u)?stSel.filter(x=>x!==u):stSel.concat(u);drawStore()};
+$("storecancel").onclick=()=>$("storeov").classList.remove("on");
+$("storedone").onclick=()=>{
+  const all=S.inv.concat(S.gar);
+  S.inv=all.filter(o=>!stSel.includes(o.u));S.gar=all.filter(o=>stSel.includes(o.u));
+  sel=[];showUsClean();save();$("storeov").classList.remove("on");render()};
+function showUsClean(){try{if(S.prof&&Array.isArray(S.prof.show))S.prof.show=S.prof.show.filter(u=>S.inv.some(o=>o.u===u))}catch(e){}}
 $("rpanel").onclick=e=>{
   const rt=e.target.closest("[data-rt]");if(rt){RL.track=+rt.dataset.rt;render();return}
   const rl=e.target.closest("[data-rl]");
